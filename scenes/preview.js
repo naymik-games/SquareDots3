@@ -210,19 +210,19 @@ class previewGame extends Phaser.Scene {
         j++;
       }
 
-      if (key == 'goal_icons') {
+      if (key == 'gem') {
         if (i > 2) {
           y = 760;
           x = i - 3;
         } else {
           x = i;
         }
-        this.bombIcon = this.add.image(220 + x * 200, y, 'bomb1').setScale(.5).setAlpha(1).setTint(gameOptions.bombColor);
-        this.bombText = this.add.bitmapText(280 + x * 200, y, 'gothic', '0', 70).setOrigin(0, .5).setTint(0xf7484e).setAlpha(1);
-        this.bombGoal = value;
-        this.bombText.setText(value);
-        this.previewBox.add(this.bombIcon);
-        this.previewBox.add(this.bombText);
+        this.gemIcon = this.add.image(220 + x * 200, y, 'gem').setScale(.5).setAlpha(1).setTint(0xb8b8b8);
+        this.gemText = this.add.bitmapText(280 + x * 200, y, 'gothic', '0', 70).setOrigin(0, .5).setTint(0xf7484e).setAlpha(1);
+        this.gemGoal = value;
+        this.gemText.setText(value);
+        this.previewBox.add(this.gemIcon);
+        this.previewBox.add(this.gemText);
         i++;
         j++;
       }
@@ -233,12 +233,12 @@ class previewGame extends Phaser.Scene {
         } else {
           x = i;
         }
-        this.sixIcon = this.add.image(220 + x * 200, y, 'goal_icons', 11).setScale(.5).setAlpha(1);
-        this.sixText = this.add.bitmapText(280 + x * 200, y, 'gothic', '0', 70).setOrigin(0, .5).setTint(0xf7484e).setAlpha(1);
-        this.sixGoal = value;
-        this.sixText.setText(value);
-        this.previewBox.add(this.sixIcon);
-        this.previewBox.add(this.sixText);
+        this.squareIcon = this.add.image(220 + x * 200, y, 'square').setScale(.5).setAlpha(1).setTint(0xb8b8b8);
+        this.squareText = this.add.bitmapText(280 + x * 200, y, 'gothic', '0', 70).setOrigin(0, .5).setTint(0xf7484e).setAlpha(1);
+        this.squareGoal = value;
+        this.squareText.setText(value);
+        this.previewBox.add(this.squareIcon);
+        this.previewBox.add(this.squareText);
         i++;
         j++;
       }
@@ -266,7 +266,7 @@ class previewGame extends Phaser.Scene {
         } else {
           x = i;
         }
-        this.roverIcon = this.add.image(220 + x * 200, y, 'rover1').setScale(.5).setAlpha(1);
+        this.roverIcon = this.add.image(220 + x * 200, y, 'rover1').setScale(.5).setAlpha(1).setTint(0xb8b8b8);
         this.roverText = this.add.bitmapText(280 + x * 200, y, 'gothic', '0', 70).setOrigin(0, .5).setTint(0xf7484e).setAlpha(1);
         this.roverGoal = value;
         this.roverText.setText(value);
@@ -278,13 +278,13 @@ class previewGame extends Phaser.Scene {
 
       if (key == 'bomb') {
         if (i > 2) {
-          y = 160;
+          y = 760;
           x = i - 3;
         } else {
           x = i;
         }
-        this.bombIcon = this.add.image(220 + x * 200, y, 'bomb1').setScale(.5).setAlpha(1);
-        this.bombText = this.add.bitmapText(280 + x * 200, y, 'gothic', '0', 70).setOrigin(0, .5).setTint(0xffffff).setAlpha(1);
+        this.bombIcon = this.add.image(220 + x * 200, y, 'bomb1').setScale(.5).setAlpha(1).setTint(gameOptions.bombColor);
+        this.bombText = this.add.bitmapText(280 + x * 200, y, 'gothic', '0', 70).setOrigin(0, .5).setTint(0xf7484e).setAlpha(1);
         this.bombGoal = value;
         this.bombText.setText(value);
         this.previewBox.add(this.bombIcon);

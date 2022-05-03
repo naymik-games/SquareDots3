@@ -14,9 +14,11 @@ let gameOptions = {
   iceValue: 13,
   fireValue: 14,
   wildValue: 15,
+  blockValue: 16,
   dropColor: 0xe6b60b,
   iceColor: 0x65b3e0,
-  bombColor: 0xff0000
+  bombColor: 0xe66a0b,
+  squareColor: 0x333333
 
 
 }
@@ -45,7 +47,8 @@ defaultGame = {
   allowFire: false,
   fireStartCount: 4,
   allowWild: false,
-  wildStartCount: 3
+  wildStartCount: 3,
+  blocks: []
 }
 let colors = [0xDC5639, 0x823957, 0x436475, 0x5FA34C, 0xFBBD4E, 0xA6AB86];
 

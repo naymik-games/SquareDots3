@@ -34,13 +34,25 @@ class Extra {
       }
       this.extra.push(col);
     }
+    if (levelSettings.blocks.length > 0) {
+      this.addBlocks()
+    }
     if (levelSettings.allowBomb) {
       this.addExtra(levelSettings.bombStartCount, gameOptions.bombValue, 'bomb')
     }
     if (levelSettings.allowIce) {
       this.addExtra(levelSettings.iceStartCount, gameOptions.iceValue, 'ice')
     }
-    console.log(this.extra)
+    // console.log(this.extra)
+  }
+  addBlocks() {
+    for (let x = 0; x < levelSettings.blocks.length; x++) {
+
+      var j = levelSettings.blocks[x].col;
+      var i = levelSettings.blocks[x].row;
+
+      this.extra[i][j].value = gameOptions.blockValue
+    }
   }
   addExtra(count, value, type) {
     var i = 0

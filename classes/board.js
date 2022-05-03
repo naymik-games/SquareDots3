@@ -85,8 +85,8 @@ class Board {
   valid(row, col) {
     return row >= 0 && row < this.rows && col >= 0 && col < this.cols //&& this.gameArray[row] != undefined && this.gameArray[row][col] != undefined;
   }
-  isNonSelect(value) {
-    return value == gameOptions.dropValue || value == gameOptions.gemValue || value == gameOptions.fireValue
+  isNonSelect(value, eValue) {
+    return value == gameOptions.dropValue || value == gameOptions.gemValue || value == gameOptions.fireValue || eValue == gameOptions.blockValue
   }
   findAll(value) {
     var positions = [];

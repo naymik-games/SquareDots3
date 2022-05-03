@@ -94,6 +94,10 @@ class preloadGame extends Phaser.Scene {
       frameWidth: 128,
       frameHeight: 128
     });
+    this.load.spritesheet("switch", "assets/sprites/switch.png", {
+      frameWidth: 150,
+      frameHeight: 75
+    });
     this.load.image('blank', 'assets/sprites/blank.png');
     this.load.image('menu', 'assets/sprites/menu.png');
     this.load.image('star', 'assets/sprites/star.png');
@@ -112,6 +116,11 @@ class preloadGame extends Phaser.Scene {
     this.load.image('fire', 'assets/sprites/fire-2-128.png');
     this.load.image('modal', 'assets/sprites/modal.png');
     this.load.image('check', 'assets/sprites/checkmark-128.png');
+    this.load.image('square', 'assets/sprites/grid-two-up-128.png');
+    this.load.image('one_dot', 'assets/sprites/one_dot.png');
+    this.load.image('all_color', 'assets/sprites/all_color.png');
+    this.load.image('bombPU', 'assets/sprites/bomb-96.png');
+    this.load.image('block', 'assets/sprites/block.png');
   }
   create() {
     this.scene.start("startGame");

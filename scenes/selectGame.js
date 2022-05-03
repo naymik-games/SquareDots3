@@ -67,7 +67,7 @@ class selectGame extends Phaser.Scene {
           this.itemGroup.add(levelText);
         }
       }
-      this.pageSelectors[k] = this.add.sprite(game.config.width / 2 + (k - Math.floor(menuOptions.pages / 2) + 0.5 * (1 - menuOptions.pages % 2)) * 40, game.config.height - 190, "levelpages");
+      this.pageSelectors[k] = this.add.sprite(game.config.width / 2 + (k - Math.floor(menuOptions.pages / 2) + 0.5 * (1 - menuOptions.pages % 2)) * 80, game.config.height - 190, "levelpages").setScale(2);
       this.pageSelectors[k].setInteractive();
       this.pageSelectors[k].on("pointerdown", function () {
         if (this.scene.canMove) {
@@ -79,10 +79,10 @@ class selectGame extends Phaser.Scene {
       this.pageSelectors[k].pageIndex = k;
       this.pageSelectors[k].tint = menuOptions.colors[k];
       if (k == this.currentPage) {
-        this.pageSelectors[k].scaleY = 1;
+        // this.pageSelectors[k].scaleY = 1;
       }
       else {
-        this.pageSelectors[k].scaleY = 0.5;
+        // this.pageSelectors[k].scaleY = 0.5;
       }
     }
     this.input.on("dragstart", function (pointer, gameObject) {
@@ -141,10 +141,10 @@ class selectGame extends Phaser.Scene {
     this.currentPage += page;
     for (var k = 0; k < menuOptions.pages; k++) {
       if (k == this.currentPage) {
-        this.pageSelectors[k].scaleY = 1;
+        // this.pageSelectors[k].scaleY = 1;
       }
       else {
-        this.pageSelectors[k].scaleY = 0.5;
+        // this.pageSelectors[k].scaleY = 0.5;
       }
     }
     this.pageText.text = "Groups (" + (this.currentPage + 1).toString() + " / " + menuOptions.pages + ")";

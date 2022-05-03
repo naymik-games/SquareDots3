@@ -17,8 +17,10 @@ window.onload = function () {
       width: 900,
       height: 1640
     },
-
-    scene: [preloadGame, startGame, selectGame, previewGame, playGame, UI, endGame]
+    dom: {
+      createContainer: true
+    },
+    scene: [preloadGame, startGame, selectGame, previewGame, playGame, UI, levelBuilder, endGame]
   }
   game = new Phaser.Game(gameConfig);
   window.focus();
@@ -38,6 +40,7 @@ class playGame extends Phaser.Scene {
   }
   create() {
     //var colors = [0xDC5639, 0x823957, 0x436475, 0x5FA34C, 0xFBBD4E];
+    this.tally = null
     this.tally = {
       red: 0,
       blue: 0,
@@ -73,6 +76,9 @@ class playGame extends Phaser.Scene {
     this.selectAlpha = .6
     this.removeSpeed = 200
     this.fallSpeed = 100
+    this.startAllColor = false
+    this.startOneDot = false
+    this.startBombPU = false
     this.b = new Board(this.rows, this.cols, this.items);
     this.e = new Extra(this.rows, this.cols, this.items)
     //console.log(this.e.extra)
@@ -101,9 +107,10 @@ class playGame extends Phaser.Scene {
     this.input.on("pointermove", this.drawPath, this);
     this.input.on("pointerup", this.endDrag, this);
     this.makeMenu()
-    for (var i = 0; i < colors.length; i++) {
+    this.makePowerUp()
+    /* for (var i = 0; i < colors.length; i++) {
       var tile = this.add.image(75 + i * 150, 1500, 'circle').setTint(colors[i])
-    }
+    } */
     //this.check = this.add.image(725, 1000, 'check').setScale(.7);
   }
   update() {
@@ -116,11 +123,14 @@ class playGame extends Phaser.Scene {
         let posY = this.yOffset + this.dotSize * i + this.dotSize / 2
         if (this.b.board[i][j].value <= 5) {
           var cir = this.add.image(posX, posY, 'circle').setTint(colors[this.b.board[i][j].value])
+          this.b.board[i][j].type = 'dot'
         } else if (this.b.board[i][j].value == gameOptions.dropValue) {
           var cir = this.add.image(posX, posY, 'drop').setTint(gameOptions.dropColor)
+          this.b.board[i][j].type = 'drop'
         } else if (this.b.board[i][j].value == gameOptions.gemValue) {
           var ran = Math.floor(Math.random() * this.items)
           var cir = this.add.image(posX, posY, 'gem').setTint(colors[ran])
+          this.b.board[i][j].type = 'gem'
           this.b.board[i][j].gemColor = ran
         } else if (this.b.board[i][j].value == gameOptions.roverValue) {
           var ran = Math.floor(Math.random() * this.items)
@@ -128,13 +138,14 @@ class playGame extends Phaser.Scene {
           this.b.board[i][j].value = ran
           this.b.board[i][j].isRover = true
           this.b.board[i][j].roverDir = Phaser.Math.Between(0, 3)
+          this.b.board[i][j].type = 'rover'
         } else if (this.b.board[i][j].value == gameOptions.fireValue) {
           var ran = Math.floor(Math.random() * this.items)
           var cir = this.add.image(posX, posY, 'fire').setTint(0xff0000)
-
+          this.b.board[i][j].type = 'fire'
         } else if (this.b.board[i][j].value == gameOptions.wildValue) {
-
-          var cir = this.add.image(posX, posY, 'bomb1').setTint(0xe6e6e6)
+          this.b.board[i][j].type = 'wild'
+          var cir = this.add.image(posX, posY, 'bomb1').setTint(gameOptions.bombColor)
 
         }
 
@@ -148,14 +159,23 @@ class playGame extends Phaser.Scene {
   drawExtra() {
     for (var i = 0; i < this.rows; i++) {
       for (var j = 0; j < this.cols; j++) {
+        if (this.e.valueAt(i, j) == gameOptions.blockValue) {
+          let posX = this.xOffset + this.dotSize * j + this.dotSize / 2;
+          let posY = this.yOffset + this.dotSize * i + this.dotSize / 2;
+          var cir = this.add.image(posX, posY, 'block')
+          cir.displayWidth = this.spriteSize + 20
+          cir.displayHeight = this.spriteSize + 20
 
+          this.e.extra[i][j].type = 'block',
+            this.e.extra[i][j].image = cir
+        }
 
         if (this.e.valueAt(i, j) == gameOptions.bombValue) {
           let posX = this.xOffset + this.dotSize * j + this.dotSize / 2;
           let posY = this.yOffset + this.dotSize * i + this.dotSize / 2;
           var cir = this.add.image(posX, posY, 'bomb1').setTint(0xff0000)
-          cir.displayWidth = this.spriteSize + 10
-          cir.displayHeight = this.spriteSize + 10
+          cir.displayWidth = this.spriteSize + 20
+          cir.displayHeight = this.spriteSize + 20
 
           this.e.extra[i][j].type = 'bomb',
             this.e.extra[i][j].image = cir
@@ -175,6 +195,7 @@ class playGame extends Phaser.Scene {
 
   }
   gemSelect(pointer) {
+    if (pointer.y > this.yOffset + this.rows * this.dotSize) { return }
     this.isSpecial = false
     this.pathValue = null
     this.square = false
@@ -184,8 +205,49 @@ class playGame extends Phaser.Scene {
     if (this.canPick) {
       let row = Math.floor((pointer.y - this.yOffset) / this.dotSize);
       let col = Math.floor((pointer.x - this.xOffset) / this.dotSize);
+      if (this.startOneDot) {
+        if (this.b.board[row][col].type != 'dot') { return }
+        this.dragging = true
+        this.isSpecial = true
+        this.pathDots = [{ row: row, col: col }]
+        this.b.board[row][col].image.setAlpha(this.selectAlpha)
+        this.oneDot.clearTint()
+        this.explode(row, col)
+        this.startOneDot = false
+        //this.removeGems()
+        //this.removeOne(row, col)
+        return
+      }
+      if (this.startAllColor) {
+        if (this.b.board[row][col].type != 'dot') { return }
+        this.dragging = true
+        this.isSpecial = true
+        this.pathDots = this.b.findAll(this.valueAt(row, col))
+        this.highlightAll()
+        this.allColor.clearTint()
+        this.explode(row, col)
+        this.startAllColor = false
+        //this.removeGems()
+        //this.removeOne(row, col)
+        return
+      }
+      if (this.startBombPU) {
+        if (this.b.board[row][col].type != 'dot') { return }
+        this.dragging = true
+        this.isSpecial = true
+        this.explodeBomb(row, col)
+
+        this.bombPU.clearTint()
+
+        this.startBombPU = false
+        //this.removeGems()
+        //this.removeOne(row, col)
+        return
+      }
+      //let row = Math.floor((pointer.y - this.yOffset) / this.dotSize);
+      //let col = Math.floor((pointer.x - this.xOffset) / this.dotSize);
       // console.log(this.b.board[row][col])
-      if (this.b.valid(row, col) && !this.b.isNonSelect(this.b.board[row][col].value)) {
+      if (this.b.valid(row, col) && !this.b.isNonSelect(this.b.board[row][col].value, this.e.extra[row][col].value)) {
         this.dragging = true;
         this.pathDots = [{ row: row, col: col }]
         this.b.board[row][col].image.setAlpha(this.selectAlpha)
@@ -194,12 +256,13 @@ class playGame extends Phaser.Scene {
     }
   }
   drawPath(pointer) {
+    if (this.startOneDot || this.startAllColor) { return }
     if (this.dragging) {
       let row = Math.floor((pointer.y - this.yOffset) / this.dotSize);
       let col = Math.floor((pointer.x - this.xOffset) / this.dotSize);
       var newDot = { row: row, col: col }
       var current = this.pathDots[this.pathDots.length - 1];
-      if (!this.b.valid(row, col)) { return }
+      if (!this.b.valid(row, col) || this.b.isNonSelect(this.b.board[row][col].value, this.e.extra[row][col].value)) { return }
       if (!this.connects(current, newDot)) return;
       //backtrack
       if (this.pathDots.length > 1) {
@@ -247,14 +310,15 @@ class playGame extends Phaser.Scene {
 
       } else {
         this.tally.moves++
-        this.events.emit('moves', { moves: this.tally.moves })
+
       }
       if (this.square) {
         //this.squareBack.setAlpha(0)
-        this.tally.square++
+        //this.tally.square++
       }
       this.removeGems()
     }
+
   }
   removeGems() {
     this.roverExplode = []
@@ -393,20 +457,24 @@ class playGame extends Phaser.Scene {
       //console.log(this.b.board[movement.row][movement.col])
       let sprite = this.poolArray.pop();
       sprite.alpha = 1;
+
       //add dot
       if (this.b.board[movement.row][movement.col].value <= 5) {
         sprite.setTexture('circle')
         sprite.setTint(colors[this.b.board[movement.row][movement.col].value]);
+        this.b.board[movement.row][movement.col].type = 'dot'
         //add drop
       } else if (this.b.board[movement.row][movement.col].value == gameOptions.dropValue) {
         sprite.setTexture('drop')
         sprite.setTint(gameOptions.dropColor);
+        this.b.board[movement.row][movement.col].type = 'drop'
         //add gem
       } else if (this.b.board[movement.row][movement.col].value == gameOptions.gemValue) {
         sprite.setTexture('gem')
         var ran = Math.floor(Math.random() * this.items)
         sprite.setTint(colors[ran])
         this.b.board[movement.row][movement.col].gemColor = ran
+        this.b.board[movement.row][movement.col].type = 'gem'
         //add rover
       } else if (this.b.board[movement.row][movement.col].value == gameOptions.roverValue) {
         var ran = Math.floor(Math.random() * this.items)
@@ -415,6 +483,7 @@ class playGame extends Phaser.Scene {
         this.b.board[movement.row][movement.col].value = ran
         this.b.board[movement.row][movement.col].isRover = true
         this.b.board[movement.row][movement.col].roverDir = Phaser.Math.Between(0, 3)
+        this.b.board[movement.row][movement.col].type = 'rover'
       } /* else if (this.b.board[movement.row][movement.col].value == gameOptions.iceValue) {
         sprite.setTexture('ice1')
         
@@ -473,6 +542,7 @@ class playGame extends Phaser.Scene {
               this.dragging = false;
               this.isSpecial = false;
               this.pathValue = null
+              this.events.emit('moves', { moves: this.tally.moves })
 
             }
 
@@ -731,6 +801,26 @@ class playGame extends Phaser.Scene {
     }.bind(this))
   }
 
+  makePowerUp() {
+    var puBack = this.add.image(0, 1475, 'blank').setOrigin(0, .5).setTint(0x333333)
+    puBack.displayWidth = game.config.width
+    puBack.displayHeight = 125
+    this.oneDot = this.add.image(75, 1475, 'one_dot').setInteractive()
+    this.oneDot.on('pointerdown', function () {
+      this.startOneDot = true
+      this.oneDot.setTint(0xff0000)
+    }, this)
+    this.allColor = this.add.image(200, 1475, 'all_color').setInteractive()
+    this.allColor.on('pointerdown', function () {
+      this.startAllColor = true
+      this.allColor.setTint(0xff0000)
+    }, this)
+    this.bombPU = this.add.image(325, 1475, 'bombPU').setInteractive()
+    this.bombPU.on('pointerdown', function () {
+      this.startBombPU = true
+      this.bombPU.setTint(0xff0000)
+    }, this)
+  }
 
   toggleMenu() {
 

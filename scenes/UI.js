@@ -37,13 +37,13 @@ class UI extends Phaser.Scene {
     } else if (gameMode == 'challenge') {
       this.totalMovesText = this.add.bitmapText(95, 100, 'gothic', levels[onLevel].movesGoal, 100).setOrigin(.5).setTint(0xf5f5f5).setAlpha(1);
 
-      var levelBG = this.add.image(game.config.width, game.config.height, 'blank').setOrigin(1).setTint(0x333333).setAlpha(.8)
+      /* var levelBG = this.add.image(game.config.width, game.config.height, 'blank').setOrigin(1).setTint(0x333333).setAlpha(.8)
       levelBG.displayWidth = 150;
-      levelBG.displayHeight = 175
+      levelBG.displayHeight = 175 */
 
       var temp = onLevel + 1;
-      this.levelText = this.add.bitmapText(860, 1520, 'gothic', 'L ' + temp, 50).setOrigin(1, .5).setTint(0xf7484e).setAlpha(1);
-      this.totalclearedText = this.add.bitmapText(860, 1600, 'gothic', '0', 50).setOrigin(1, .5).setTint(0x4c4f4d).setAlpha(1);
+      this.levelText = this.add.bitmapText(635, 1590, 'gothic', 'L ' + temp, 50).setOrigin(0, .5).setTint(0xf7484e).setAlpha(1);
+      this.totalclearedText = this.add.bitmapText(880, 1590, 'gothic', '0', 50).setOrigin(1, .5).setTint(0x4c4f4d).setAlpha(1);
       this.setupGoals();
     }
 
@@ -281,7 +281,7 @@ class UI extends Phaser.Scene {
         } else {
           x = i;
         }
-        this.iceIcon = this.add.image(xOffsetT + x * xSpace, y, 'ice1').setScale(.5).setAlpha(1);
+        this.iceIcon = this.add.image(xOffsetT + x * xSpace, y, 'ice1').setScale(.5).setAlpha(1).setTint(gameOptions.iceColor);
         this.iceText = this.add.bitmapText(xOffsetI + x * xSpace, y, 'gothic', '0', labelSize).setOrigin(0, .5).setTint(labelColor).setAlpha(1);
         this.iceGoal = value;
         this.iceText.setText(value);
@@ -291,18 +291,18 @@ class UI extends Phaser.Scene {
         j++;
       }
 
-      if (key == 'gems') {
+      if (key == 'gem') {
         if (i > 2) {
           y = 160;
           x = i - 3;
         } else {
           x = i;
         }
-        this.bombIcon = this.add.image(xOffsetT + x * xSpace, y, 'gem').setScale(.5).setAlpha(1);
-        this.bombText = this.add.bitmapText(xOffsetI + x * xSpace, y, 'gothic', '0', labelSize).setOrigin(0, .5).setTint(labelColor).setAlpha(1);
-        this.bombGoal = value;
-        this.bombText.setText(value);
-        this.bombWin = true;
+        this.gemIcon = this.add.image(xOffsetT + x * xSpace, y, 'gem').setScale(.5).setAlpha(1).setTint(0xb8b8b8);
+        this.gemText = this.add.bitmapText(xOffsetI + x * xSpace, y, 'gothic', '0', labelSize).setOrigin(0, .5).setTint(labelColor).setAlpha(1);
+        this.gemGoal = value;
+        this.gemText.setText(value);
+        this.gemWin = true;
         this.winCount++;
         i++;
         j++;
@@ -314,7 +314,7 @@ class UI extends Phaser.Scene {
         } else {
           x = i;
         }
-        this.sixIcon = this.add.image(xOffsetT + x * xSpace, y, 'goal_icons', 11).setScale(.5).setAlpha(1);
+        this.sixIcon = this.add.image(xOffsetT + x * xSpace, y, 'square').setScale(.5).setAlpha(1).setTint(0xb8b8b8);
         this.sixText = this.add.bitmapText(xOffsetI + x * xSpace, y, 'gothic', '0', labelSize).setOrigin(0, .5).setTint(labelColor).setAlpha(1);
         this.sixGoal = value;
         this.sixText.setText(value);
@@ -346,7 +346,7 @@ class UI extends Phaser.Scene {
         } else {
           x = i;
         }
-        this.roverIcon = this.add.image(xOffsetT + x * xSpace, y, 'rover1').setScale(.5).setAlpha(1);
+        this.roverIcon = this.add.image(xOffsetT + x * xSpace, y, 'rover1').setScale(.5).setAlpha(1).setTint(0xb8b8b8);
         this.roverText = this.add.bitmapText(xOffsetI + x * xSpace, y, 'gothic', '0', labelSize).setOrigin(0, .5).setTint(labelColor).setAlpha(1);
         this.roverGoal = value;
         this.roverText.setText(value);
@@ -362,7 +362,7 @@ class UI extends Phaser.Scene {
         } else {
           x = i;
         }
-        this.bombIcon = this.add.image(xOffsetT + x * xSpace, y, 'bomb1').setScale(.5).setAlpha(1);
+        this.bombIcon = this.add.image(xOffsetT + x * xSpace, y, 'bomb1').setScale(.5).setAlpha(1).setTint(gameOptions.bombColor);
         this.bombText = this.add.bitmapText(xOffsetI + x * xSpace, y, 'gothic', '0', labelSize).setOrigin(0, .5).setTint(labelColor).setAlpha(1);
         this.bombGoal = value;
         this.bombText.setText(value);
@@ -479,13 +479,13 @@ class UI extends Phaser.Scene {
         this.sixWin = false;
       }
     }
-    if (this.squareBombWin) {
-      this.squareBombText.setText(this.squareBombGoal - tally.squareBomb);
-      if (tally.squareBomb >= this.squareBombGoal) {
-        this.tweenCount(this.squareBombText, this.squareBombIcon);
-        this.squareBombGoal = -100
+    if (this.gemWin) {
+      this.gemText.setText(this.gemGoal - this.main.tally.gem);
+      if (this.main.tally.gem >= this.gemGoal) {
+        this.tweenCount(this.gemText, this.gemIcon);
+        this.gemGoal = -100
         this.winComplete++;
-        this.squareBombWin = false;
+        this.gemWin = false;
       }
     }
     if (this.roverWin) {

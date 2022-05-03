@@ -15,7 +15,7 @@ class startGame extends Phaser.Scene {
     }
     var lev = levels.length
     var stat = gameData.levelStatus.length
-    console.log('lev ' + lev + ', ' + 'stat ' + stat)
+    //console.log('lev ' + lev + ', ' + 'stat ' + stat)
     if (lev > stat) {
       for (var i = 0; i < lev - stat; i++) {
         gameData.levelStatus.push(-1)
@@ -36,6 +36,11 @@ class startGame extends Phaser.Scene {
     startChanllenge.setInteractive();
     startChanllenge.on('pointerdown', this.clickHandler3, this);
 
+    var levelBuilder = this.add.bitmapText(game.config.width / 2, 1475, 'gothic', 'Level Builder', 80).setOrigin(.5).setTint(0xffffff);
+    levelBuilder.setInteractive();
+    levelBuilder.on('pointerdown', function () {
+      this.scene.start('levelBuilder');
+    }, this);
 
 
   }
