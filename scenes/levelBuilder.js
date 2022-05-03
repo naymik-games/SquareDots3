@@ -52,8 +52,8 @@ class levelBuilder extends Phaser.Scene {
     this.bombSwitch = this.add.image(game.config.width / 2 + 25, 725, 'switch', (this.bombOn) ? 1 : 0).setOrigin(0, .5).setInteractive().setScale(.9)
     this.bombSwitch.on('pointerdown', this.bombToggle, this)
     //allow fire
-    var fire = this.add.bitmapText(game.config.width / 2 - 25, 725, 'gothic', 'Fire', 50).setOrigin(1, .5).setTint(0xffffff);
-    this.fireSwitch = this.add.image(game.config.width / 2 + 25, 725, 'switch', (this.fireOn) ? 1 : 0).setOrigin(0, .5).setInteractive().setScale(.9)
+    var fire = this.add.bitmapText(game.config.width / 2 - 25, 825, 'gothic', 'Fire', 50).setOrigin(1, .5).setTint(0xffffff);
+    this.fireSwitch = this.add.image(game.config.width / 2 + 25, 825, 'switch', (this.fireOn) ? 1 : 0).setOrigin(0, .5).setInteractive().setScale(.9)
     this.fireSwitch.on('pointerdown', this.fireToggle, this)
 
 
