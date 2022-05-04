@@ -11,9 +11,9 @@ class levelBuilder extends Phaser.Scene {
 
   }
   create() {
-    lbData = JSON.parse(localStorage.getItem('SD3lb'));
+    lbData = JSON.parse(localStorage.getItem('SD3lb1'));
     if (lbData === null || lbData.length <= 0) {
-      localStorage.setItem('SD3lb', JSON.stringify(defaultGame));
+      localStorage.setItem('SD3lb1', JSON.stringify(defaultGame));
       lbData = defaultGame;
     }
 
@@ -173,7 +173,7 @@ class levelBuilder extends Phaser.Scene {
     }
   }
   clickHandler() {
-    localStorage.setItem('SD3lb', JSON.stringify(defaultGame));
+    localStorage.setItem('SD3lb1', JSON.stringify(defaultGame));
     gameMode = 'moves'
     lbFlag = true
     this.scene.stop()
@@ -181,7 +181,7 @@ class levelBuilder extends Phaser.Scene {
     this.scene.launch('UI');
   }
   clickHandler2() {
-    localStorage.setItem('SD3lb', JSON.stringify(defaultGame));
+    localStorage.setItem('SD3lb1', JSON.stringify(defaultGame));
     gameMode = 'time'
     lbFlag = true
     this.scene.stop()

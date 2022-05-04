@@ -54,20 +54,32 @@ class startGame extends Phaser.Scene {
     this.cameras.main.setBackgroundColor(0x000000);
 
     var title = this.add.bitmapText(game.config.width / 2, 100, 'gothic', 'SquareDots', 130).setOrigin(.5).setTint(0xf7484e);
+    var playMoves = this.add.image(200, 375, 'play').setOrigin(1, .5).setTint(0xf7484e).setScale(2).setInteractive()
+    var startMoves = this.add.bitmapText(225, 340, 'gothic', 'MOVES', 70).setOrigin(0, .5).setTint(0xffffff);
+    var highMoves = this.add.bitmapText(225, 415, 'gothic', 'Best: ' + gameData.mostDotsMoves, 40).setOrigin(0, .5).setTint(0xcccccc);
+    playMoves.setInteractive();
+    playMoves.on('pointerdown', this.clickHandler, this);
 
-    var startMoves = this.add.bitmapText(game.config.width / 2, 375, 'gothic', 'Moves', 80).setOrigin(.5).setTint(0xffffff);
-    startMoves.setInteractive();
-    startMoves.on('pointerdown', this.clickHandler, this);
-    var startTime = this.add.bitmapText(game.config.width / 2, 600, 'gothic', 'Time', 80).setOrigin(.5).setTint(0xffffff);
-    startTime.setInteractive();
-    startTime.on('pointerdown', this.clickHandler2, this);
-    var startChanllenge = this.add.bitmapText(game.config.width / 2, 1075, 'gothic', 'Challenge', 80).setOrigin(.5).setTint(0xffffff);
-    startChanllenge.setInteractive();
-    startChanllenge.on('pointerdown', this.clickHandler3, this);
 
-    var levelBuilder = this.add.bitmapText(game.config.width / 2, 1475, 'gothic', 'Level Builder', 80).setOrigin(.5).setTint(0xffffff);
-    levelBuilder.setInteractive();
-    levelBuilder.on('pointerdown', function () {
+
+    var playTime = this.add.image(200, 600, 'play').setOrigin(1, .5).setTint(0xf7484e).setScale(2).setInteractive()
+    var startTime = this.add.bitmapText(225, 565, 'gothic', 'TIME', 80).setOrigin(0, .5).setTint(0xffffff);
+    var highTime = this.add.bitmapText(225, 640, 'gothic', 'Best: ' + gameData.mostDotsTime, 40).setOrigin(0, .5).setTint(0xcccccc);
+    playTime.setInteractive();
+    playTime.on('pointerdown', this.clickHandler2, this);
+
+
+    var playChallenge = this.add.image(200, 975, 'levelsIcon').setOrigin(1, .5).setTint(0xf7484e).setScale(1.9).setInteractive()
+    var startChanllenge = this.add.bitmapText(225, 940, 'gothic', 'CHALLENGE', 80).setOrigin(0, .5).setTint(0xffffff);
+    var highChallenge = this.add.bitmapText(225, 1015, 'gothic', 'Level: ' + gameData.currentLevel, 40).setOrigin(0, .5).setTint(0xcccccc);
+    playChallenge.setInteractive();
+    playChallenge.on('pointerdown', this.clickHandler3, this);
+
+    var playBuilder = this.add.image(200, 1475, 'levelbuilder').setOrigin(1, .5).setTint(0xf7484e).setScale(1.9).setInteractive()
+    var levelBuilder = this.add.bitmapText(225, 1440, 'gothic', 'LEVEL BUILDER ', 80).setOrigin(0, .5).setTint(0xffffff);
+    var highLB = this.add.bitmapText(225, 1515, 'gothic', 'Best: ' + gameData.mostDotsLB, 40).setOrigin(0, .5).setTint(0xcccccc);
+    playBuilder.setInteractive();
+    playBuilder.on('pointerdown', function () {
       this.scene.start('levelBuilder');
     }, this);
 
