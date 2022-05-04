@@ -39,6 +39,7 @@ class playGame extends Phaser.Scene {
 
   }
   create() {
+    console.log(lbFlag)
     //var colors = [0xDC5639, 0x823957, 0x436475, 0x5FA34C, 0xFBBD4E];
     this.tally = null
     this.tally = {

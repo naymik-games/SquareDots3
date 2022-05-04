@@ -118,6 +118,23 @@ class endGame extends Phaser.Scene {
 
 
 			if (gameMode == 'time') {
+				if (lbFlag) {
+					if (this.totalBlocksRemoved > gameData.mostDotsLB) {
+						gameData.mostDotsLB = this.totalBlocksRemoved;
+						var high = this.totalBlocksRemoved;
+						this.newBest = true;
+					} else {
+						var high = gameData.mostDotsLB;
+					}
+				} else {
+					if (this.totalBlocksRemoved > gameData.mostDotsTime) {
+						gameData.mostDotsTime = this.totalBlocksRemoved;
+						var high = this.totalBlocksRemoved;
+						this.newBest = true;
+					} else {
+						var high = gameData.mostDotsTime;
+					}
+				}
 				if (this.totalBlocksRemoved > gameData.mostDotsTime) {
 					gameData.mostDotsTime = this.totalBlocksRemoved;
 					var high = this.totalBlocksRemoved;
@@ -126,15 +143,26 @@ class endGame extends Phaser.Scene {
 					var high = gameData.mostDotsTime;
 				}
 			} else if (gameMode == 'moves') {
-				if (this.totalBlocksRemoved > gameData.mostDotsMoves) {
-
-					gameData.mostDotsMoves = this.totalBlocksRemoved;
-
-					var high = this.totalBlocksRemoved;
-					this.newBest = true;
+				if (lbFlag) {
+					if (this.totalBlocksRemoved > gameData.mostDotsLB) {
+						gameData.mostDotsLB = this.totalBlocksRemoved;
+						var high = this.totalBlocksRemoved;
+						this.newBest = true;
+					} else {
+						var high = gameData.mostDotsLB;
+					}
 				} else {
-					var high = gameData.mostDotsMoves;
+					if (this.totalBlocksRemoved > gameData.mostDotsMoves) {
+
+						gameData.mostDotsMoves = this.totalBlocksRemoved;
+
+						var high = this.totalBlocksRemoved;
+						this.newBest = true;
+					} else {
+						var high = gameData.mostDotsMoves;
+					}
 				}
+
 
 			}
 
@@ -205,8 +233,9 @@ class endGame extends Phaser.Scene {
 	}
 	cancel() {
 		this.scene.stop();
-		this.scene.restart('playGame');
-		this.scene.restart('UI');
+		this.scene.stop('UI');
+		this.scene.start('playGame');
+		this.scene.start('UI');
 	}
 	endResults() {
 		let posX = (gameOptions.offsetX + gameOptions.gemSize * levelOptions.cols + gameOptions.gemSize / 2) / 2;

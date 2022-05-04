@@ -18,22 +18,30 @@ class UI extends Phaser.Scene {
     this.header.displayWidth = 900;
     this.header.displayHeight = 225;
 
-    this.initialTime = gameOptions.defaultTime
+    this.initialTime = levelSettings.time
     if (gameMode == 'time') {
+      var best = (lbFlag) ? gameData.mostDotsLB : gameData.mostDotsTime
       timedEvent = this.time.addEvent({ delay: 1000, callback: this.onEvent, callbackScope: this, loop: true });
       this.time = this.add.bitmapText(85, 100, 'gothic', this.formatTime(this.initialTime), 110).setOrigin(0, .5).setTint(0xcbf7ff).setAlpha(1);
       this.totalclearedText = this.add.bitmapText(445, 100, 'gothic', '0', 90).setOrigin(0, .5).setTint(0xffffff).setAlpha(1);
       this.levelText = this.add.bitmapText(860, 65, 'gothic', 'Best', 50).setOrigin(1, .5).setTint(0xffffff).setAlpha(1);
-      //  this.bestText = this.add.bitmapText(860, 160, 'gothic', gameSettings.mostDotsTime, 50).setOrigin(1, .5).setTint(0xffffff).setAlpha(1);
+      this.bestText = this.add.bitmapText(860, 160, 'gothic', best, 50).setOrigin(1, .5).setTint(0xffffff).setAlpha(1);
 
+      if (lbFlag) {
+        this.levelText = this.add.bitmapText(635, 1590, 'gothic', 'Level Builder', 38).setOrigin(0, .5).setTint(0xf7484e).setAlpha(1);
+
+      }
 
     } else if (gameMode == 'moves') {
+      var best = (lbFlag) ? gameData.mostDotsLB : gameData.mostDotsMoves
       this.totalMovesText = this.add.bitmapText(85, 100, 'gothic', levelSettings.movesGoal, 100).setOrigin(.5).setTint(0xf5f5f5).setAlpha(1);
-
       this.totalclearedText = this.add.bitmapText(445, 100, 'gothic', '0', 100).setOrigin(0, .5).setTint(0x000000).setAlpha(1);
       this.levelText = this.add.bitmapText(860, 65, 'gothic', 'Best', 50).setOrigin(1, .5).setTint(0x000000).setAlpha(1);
-      //this.bestText = this.add.bitmapText(860, 160, 'gothic', gameSettings.mostDotsMoves, 50).setOrigin(1, .5).setTint(0xffffff).setAlpha(1);
+      this.bestText = this.add.bitmapText(860, 160, 'gothic', best, 50).setOrigin(1, .5).setTint(0xffffff).setAlpha(1);
+      if (lbFlag) {
+        this.levelText = this.add.bitmapText(635, 1590, 'gothic', 'Level Builder', 38).setOrigin(0, .5).setTint(0xf7484e).setAlpha(1);
 
+      }
     } else if (gameMode == 'challenge') {
       this.totalMovesText = this.add.bitmapText(95, 100, 'gothic', levels[onLevel].movesGoal, 100).setOrigin(.5).setTint(0xf5f5f5).setAlpha(1);
 

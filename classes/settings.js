@@ -28,11 +28,13 @@ onLevel = 0
 let gameMode
 let gameData
 let levelSettings
+let lbData
 defaultGame = {
   cols: 7,
   rows: 8,
   items: 6,
   movesGoal: 20,
+  time: 60,
   allowDrop: false,
   dropStartCount: 3,
   allowGem: false,
@@ -52,11 +54,12 @@ defaultGame = {
   blocks: []
 }
 let colors = [0xDC5639, 0x823957, 0x436475, 0x5FA34C, 0xFBBD4E, 0xA6AB86];
-
+let lbFlag = false
 let gameSettings;
 var defaultValues = {
   mostDotsMoves: 0,
   mostDotsTime: 0,
+  mostDotsLB: 0,
   levelStatus: [0, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1],
   totalSquares: 0,
   group: 0,

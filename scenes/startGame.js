@@ -28,6 +28,7 @@ class startGame extends Phaser.Scene {
       rows: 8,
       items: 6,
       movesGoal: 20,
+      time: 60,
       allowDrop: false,
       dropStartCount: 0,
       allowGem: false,
@@ -74,16 +75,19 @@ class startGame extends Phaser.Scene {
   }
   clickHandler() {
     gameMode = 'moves'
+    lbFlag = false
     this.scene.start('playGame');
     this.scene.launch('UI');
   }
   clickHandler2() {
     gameMode = 'time'
+    lbFlag = false
     this.scene.start('playGame');
     this.scene.launch('UI');
   }
   clickHandler3() {
     gameMode = 'challenge'
+    lbFlag = false
     this.scene.start('selectGame');
     //this.scene.launch('UI');
   }

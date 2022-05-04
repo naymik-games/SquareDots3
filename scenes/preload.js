@@ -118,6 +118,7 @@ class preloadGame extends Phaser.Scene {
     this.load.image('all_color', 'assets/sprites/all_color.png');
     this.load.image('bombPU', 'assets/sprites/bomb-96.png');
     this.load.image('block', 'assets/sprites/block.png');
+    this.load.image('play', 'assets/sprites/play.png');
   }
   create() {
     this.scene.start("startGame");

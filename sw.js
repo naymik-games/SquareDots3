@@ -1,4 +1,4 @@
-var cacheName = 'Square Dots 3 v1.01';
+var cacheName = 'Square Dots 3 v1.05';
 var filesToCache = [
   '/',
   '/index.html',
@@ -28,7 +28,8 @@ var filesToCache = [
   '/html/dropdownCols.html',
   '/html/dropdownRows.html',
   '/html/dropdownItems.html',
-
+  '/html/dropdownMoves.html',
+  '/html/dropdownTime.html',
 
   '/assets/particle.png',
   '/assets/particles.png',
@@ -65,7 +66,7 @@ var filesToCache = [
   '/assets/sprites/switch.png',
   '/assets/sprites/transp.png',
   '/assets/sprites/triangle-outline-128.png',
-
+  '/assets/sprites/play.png',
   //'https://cdn.jsdelivr.net/gh/photonstorm/phaser@3.10.1/dist/phaser.min.js'
 ];
 self.addEventListener('install', function (event) {
