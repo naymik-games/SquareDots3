@@ -9,6 +9,33 @@ class levelBuilder extends Phaser.Scene {
 
   }
   create() {
+    defaultGame = null;
+    defaultGame = {
+      cols: 7,
+      rows: 8,
+      items: 6,
+      movesGoal: 20,
+      allowDrop: false,
+      dropStartCount: 0,
+      allowGem: false,
+      gemStartCount: 0,
+      allowRover: false,
+      roverStartCount: 0,
+      allowIce: false,
+      iceStartCount: 0,
+      allowBomb: false,
+      bombStartCount: 0,
+      allowIce: false,
+      iceStartCount: 0,
+      allowFire: false,
+      fireStartCount: 0,
+      allowWild: false,
+      wildStartCount: 0,
+      blocks: []
+    }
+
+
+
     this.roverOn = false
     this.gemOn = false
     this.bombOn = false
@@ -21,19 +48,20 @@ class levelBuilder extends Phaser.Scene {
     let ratioY = game.config.height / window.innerHeight
     // a DOM elements is added pretty much like a sprite
     let dropdownItems = this.add.dom(100, 425).createFromCache("dropdown");
+
     dropdownItems.setScale(Math.max(ratioX, ratioY));
     dropdownItems.addListener("click");
     dropdownItems.on("click", function (e) {
       defaultGame.items = e.target.value
     }, this);
 
-    let dropdownRows = this.add.dom(300, 425).createFromCache("dropdownR");
+    let dropdownRows = this.add.dom(600, 425).createFromCache("dropdownR");
     dropdownRows.setScale(Math.max(ratioX, ratioY));
     dropdownRows.addListener("click");
     dropdownRows.on("click", function (e) {
       defaultGame.rows = e.target.value
     }, this)
-    let dropdownCols = this.add.dom(600, 425).createFromCache("dropdownC");
+    let dropdownCols = this.add.dom(300, 425).createFromCache("dropdownC");
     dropdownCols.setScale(Math.max(ratioX, ratioY));
     dropdownCols.addListener("click");
     dropdownCols.on("click", function (e) {
@@ -57,6 +85,13 @@ class levelBuilder extends Phaser.Scene {
     this.fireSwitch.on('pointerdown', this.fireToggle, this)
 
 
+    var startMoves = this.add.bitmapText(game.config.width / 2 - 150, 1200, 'gothic', 'Moves', 80).setOrigin(.5).setTint(0xffffff);
+    startMoves.setInteractive();
+    startMoves.on('pointerdown', this.clickHandler, this);
+    var startTime = this.add.bitmapText(game.config.width / 2 + 150, 1200, 'gothic', 'Time', 80).setOrigin(.5).setTint(0xffffff);
+    startTime.setInteractive();
+    startTime.on('pointerdown', this.clickHandler2, this);
+
     var exit = this.add.image(game.config.width / 2, 1550, 'menu_icons', 5).setInteractive()
     exit.on('pointerdown', function () {
 
@@ -65,29 +100,6 @@ class levelBuilder extends Phaser.Scene {
 
     }, this);
 
-    defaultGame = {
-      cols: 7,
-      rows: 8,
-      items: 6,
-      movesGoal: 20,
-      allowDrop: false,
-      dropStartCount: 3,
-      allowGem: false,
-      gemStartCount: 2,
-      allowRover: false,
-      roverStartCount: 3,
-      allowIce: false,
-      iceStartCount: 3,
-      allowBomb: false,
-      bombStartCount: 3,
-      allowIce: false,
-      iceStartCount: 4,
-      allowFire: false,
-      fireStartCount: 4,
-      allowWild: false,
-      wildStartCount: 3,
-      blocks: []
-    }
 
   }
   roverToggle() {
@@ -141,5 +153,15 @@ class levelBuilder extends Phaser.Scene {
       defaultGame.fireStartCount = Phaser.Math.Between(2, 5)
       this.fireSwitch.setFrame(1)
     }
+  }
+  clickHandler() {
+    gameMode = 'moves'
+    this.scene.start('playGame');
+    this.scene.launch('UI');
+  }
+  clickHandler2() {
+    gameMode = 'time'
+    this.scene.start('playGame');
+    this.scene.launch('UI');
   }
 }

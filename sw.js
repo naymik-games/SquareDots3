@@ -1,4 +1,4 @@
-var cacheName = 'Square Dots 3 v1.0';
+var cacheName = 'Square Dots 3 v1.01';
 var filesToCache = [
   '/',
   '/index.html',

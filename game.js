@@ -145,7 +145,7 @@ class playGame extends Phaser.Scene {
           this.b.board[i][j].type = 'fire'
         } else if (this.b.board[i][j].value == gameOptions.wildValue) {
           this.b.board[i][j].type = 'wild'
-          var cir = this.add.image(posX, posY, 'bomb1').setTint(gameOptions.bombColor)
+          var cir = this.add.image(posX, posY, 'bomb1').setTint(gameOptions.wildColor)
 
         }
 
@@ -173,7 +173,7 @@ class playGame extends Phaser.Scene {
         if (this.e.valueAt(i, j) == gameOptions.bombValue) {
           let posX = this.xOffset + this.dotSize * j + this.dotSize / 2;
           let posY = this.yOffset + this.dotSize * i + this.dotSize / 2;
-          var cir = this.add.image(posX, posY, 'bomb1').setTint(0xff0000)
+          var cir = this.add.image(posX, posY, 'bomb1').setTint(gameOptions.bombColor)
           cir.displayWidth = this.spriteSize + 20
           cir.displayHeight = this.spriteSize + 20
 

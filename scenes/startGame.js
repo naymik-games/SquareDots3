@@ -22,6 +22,34 @@ class startGame extends Phaser.Scene {
       }
       localStorage.setItem('SD3save', JSON.stringify(gameData));
     }
+    defaultGame = null;
+    defaultGame = {
+      cols: 7,
+      rows: 8,
+      items: 6,
+      movesGoal: 20,
+      allowDrop: false,
+      dropStartCount: 0,
+      allowGem: false,
+      gemStartCount: 0,
+      allowRover: false,
+      roverStartCount: 0,
+      allowIce: false,
+      iceStartCount: 0,
+      allowBomb: false,
+      bombStartCount: 0,
+      allowIce: false,
+      iceStartCount: 0,
+      allowFire: false,
+      fireStartCount: 0,
+      allowWild: false,
+      wildStartCount: 0,
+      blocks: []
+    }
+
+
+
+
     this.cameras.main.setBackgroundColor(0x000000);
 
     var title = this.add.bitmapText(game.config.width / 2, 100, 'gothic', 'SquareDots', 130).setOrigin(.5).setTint(0xf7484e);

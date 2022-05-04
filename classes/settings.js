@@ -18,7 +18,8 @@ let gameOptions = {
   dropColor: 0xe6b60b,
   iceColor: 0x65b3e0,
   bombColor: 0xe66a0b,
-  squareColor: 0x333333
+  squareColor: 0x333333,
+  wildColor: 0xcccccc
 
 
 }

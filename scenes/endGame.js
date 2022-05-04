@@ -176,7 +176,7 @@ class endGame extends Phaser.Scene {
 		playText.on('pointerdown', this.play, this);
 		this.replayIcon.on('pointerdown', this.cancel, this);
 
-		localStorage.setItem('SD2save', JSON.stringify(gameData));
+		localStorage.setItem('SD3save', JSON.stringify(gameData));
 
 
 
@@ -251,7 +251,7 @@ class endGame extends Phaser.Scene {
 			this.scene.stop('UI');
 			this.scene.start("startGame");
 		}, this);
-		localStorage.setItem('SDsave', JSON.stringify(gameData));
+		localStorage.setItem('SD3save', JSON.stringify(gameData));
 	}
 
 
