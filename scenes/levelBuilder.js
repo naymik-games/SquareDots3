@@ -20,7 +20,12 @@ class levelBuilder extends Phaser.Scene {
     defaultGame = null;
     defaultGame = lbData
 
-
+    this.itemsArray = [3, 4, 5, 6]
+    this.colsArray = [4, 5, 6, 7, 8]
+    this.rowsArray = [4, 5, 6, 7, 8, 9, 10]
+    this.movesArray = [5, 10, 15, 20, 25, 30, 35, 40, 45, 50]
+    this.timeArray = [30, 45, 60, 75, 90, 105, 120, 135, 150, 165, 180]
+    this.timeClockArray = [':30', ':45', '1:00', '1:15', '1:30', '1:45', '2:00', '2:15', '2:30', '2:45', '3:00']
 
     this.roverOn = defaultGame.allowRover
     this.gemOn = defaultGame.allowGem
@@ -35,7 +40,7 @@ class levelBuilder extends Phaser.Scene {
     let ratioY = game.config.height / window.innerHeight
     // items dropdown
     var colorText = this.add.bitmapText(75, 395, 'gothic', 'Items', 50).setOrigin(0, 1).setTint(0xffffff);
-
+    //this.itmeSelect()
     let dropdownItems = this.add.dom(75, 400).createFromCache("dropdown").setOrigin(0);
     let color = dropdownItems.getChildByName("colors");
     color.value = defaultGame.items
@@ -187,5 +192,11 @@ class levelBuilder extends Phaser.Scene {
     this.scene.stop()
     this.scene.start('playGame');
     this.scene.launch('UI');
+  }
+  itmeSelect() {
+
+    var itemSelectText = this.add.bitmapText(75, 500, 'gothic', defaultGame.items, 50).setOrigin(.5).setTint(0xffffff);
+    itemSelectText.value = this.itemsArray.indexOf(defaultGame.items)
+    console.log(itemSelectText.value)
   }
 }

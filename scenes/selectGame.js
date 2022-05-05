@@ -35,7 +35,7 @@ class selectGame extends Phaser.Scene {
     }
     //this.savedData = localStorage.getItem(menuOptions.localStorageName) == null ? this.stars.toString() : localStorage.getItem(menuOptions.localStorageName);
     //this.stars = this.savedData.split(",");
-    this.currentPage = onGroup;
+    this.currentPage = 0;
     this.pageText = this.add.bitmapText(game.config.width / 2, 75, 'gothic', groups[onGroup].title + " (1 / " + menuOptions.pages + ")", 80).setOrigin(.5).setTint(0xffffff).setAlpha(1);
 
 
@@ -130,7 +130,7 @@ class selectGame extends Phaser.Scene {
         }
       }
     }, this);
-    //this.changePage(3)
+    this.changePage(onGroup)
     var backIcon = this.add.image(game.config.width / 2, 1550, 'menu_icons', 5).setInteractive()
     backIcon.on('pointerdown', function () {
       this.scene.stop()

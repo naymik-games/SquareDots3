@@ -1,4 +1,4 @@
-let timedEvent
+
 class UI extends Phaser.Scene {
 
   constructor() {
@@ -21,7 +21,7 @@ class UI extends Phaser.Scene {
     this.initialTime = levelSettings.time
     if (gameMode == 'time') {
       var best = (lbFlag) ? gameData.mostDotsLB : gameData.mostDotsTime
-      timedEvent = this.time.addEvent({ delay: 1000, callback: this.onEvent, callbackScope: this, loop: true });
+      this.timedEvent = this.time.addEvent({ delay: 1000, callback: this.onEvent, callbackScope: this, loop: true });
       this.time = this.add.bitmapText(85, 100, 'gothic', this.formatTime(this.initialTime), 110).setOrigin(0, .5).setTint(0xcbf7ff).setAlpha(1);
       this.totalclearedText = this.add.bitmapText(445, 100, 'gothic', '0', 90).setOrigin(0, .5).setTint(0xffffff).setAlpha(1);
       this.levelText = this.add.bitmapText(860, 65, 'gothic', 'Best', 50).setOrigin(1, .5).setTint(0xffffff).setAlpha(1);
@@ -115,6 +115,7 @@ class UI extends Phaser.Scene {
 
       if (this.initialTime <= 0) {
         //alert('game over')
+        this.timedEvent.remove();
         this.scene.pause('playGame');
         this.scene.launch("endGame", { outcome: 1, movesLeft: this.movesLeft, totalRemoved: this.dots });
         this.scene.pause('UI');

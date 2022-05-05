@@ -22,6 +22,7 @@ class startGame extends Phaser.Scene {
       }
       localStorage.setItem('SD3save', JSON.stringify(gameData));
     }
+    onGroup = gameData.group
     defaultGame = null;
     defaultGame = {
       cols: 7,

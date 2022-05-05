@@ -101,7 +101,7 @@ class endGame extends Phaser.Scene {
 				}
 
 				gameData.currentLevel = onLevel + 1
-
+				gameData.group = onGroup
 
 
 				this.timeline.play();

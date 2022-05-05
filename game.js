@@ -83,7 +83,9 @@ class playGame extends Phaser.Scene {
     this.b = new Board(this.rows, this.cols, this.items);
     this.e = new Extra(this.rows, this.cols, this.items)
     //console.log(this.e.extra)
-
+    this.squareBox = this.add.graphics();
+    this.squareBox.lineStyle(10, 0x00ff00, 1);
+    this.squareBox.fillStyle(0x000000, 0);
     this.drawBoard()
     this.drawExtra()
     this.graphics = this.add.graphics({
@@ -113,6 +115,8 @@ class playGame extends Phaser.Scene {
       var tile = this.add.image(75 + i * 150, 1500, 'circle').setTint(colors[i])
     } */
     //this.check = this.add.image(725, 1000, 'check').setScale(.7);
+
+
   }
   update() {
 
@@ -289,6 +293,10 @@ class playGame extends Phaser.Scene {
         this.square = true
         this.pathDots = this.b.findAll(this.valueAt(this.pathDots[0].row, this.pathDots[0].col))
         this.highlightAll()
+        this.squareBox.lineStyle(10, colors[this.valueAt(this.pathDots[0].row, this.pathDots[0].col)], 1);
+        this.squareBox.fillStyle(colors[this.valueAt(this.pathDots[0].row, this.pathDots[0].col)], .2);
+        this.squareBox.strokeRoundedRect(this.xOffset - 5, this.yOffset - 5, (this.dotSize * this.cols) + 10, (this.dotSize * this.rows + 10), 15);
+        this.squareBox.fillRoundedRect(this.xOffset - 5, this.yOffset - 5, (this.dotSize * this.cols) + 10, (this.dotSize * this.rows + 10), 15);
         return;
       }
 
@@ -316,6 +324,7 @@ class playGame extends Phaser.Scene {
       if (this.square) {
         //this.squareBack.setAlpha(0)
         //this.tally.square++
+        this.squareBox.clear()
       }
       this.removeGems()
     }
