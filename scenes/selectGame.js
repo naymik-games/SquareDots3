@@ -147,7 +147,7 @@ class selectGame extends Phaser.Scene {
         // this.pageSelectors[k].scaleY = 0.5;
       }
     }
-    this.pageText.text = "Groups (" + (this.currentPage + 1).toString() + " / " + menuOptions.pages + ")";
+    this.pageText.text = groups[onGroup].title + " (" + (this.currentPage + 1).toString() + " / " + menuOptions.pages + ")";
     var currentPosition = this.scrollingMap.x;
     this.tweens.add({
       targets: this.scrollingMap,
