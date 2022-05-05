@@ -31,6 +31,7 @@ class levelBuilder extends Phaser.Scene {
     this.gemOn = defaultGame.allowGem
     this.bombOn = defaultGame.allowBomb
     this.fireOn = defaultGame.allowFire
+    this.dropOn = defaultGame.allowDrop
     var title = this.add.bitmapText(game.config.width / 2, 100, 'gothic', 'Level Builder', 100).setOrigin(.5).setTint(0xf7484e);
     var text = 'Create and play your own level.'
     var info = this.add.bitmapText(game.config.width / 2, 175, 'gothic', text, 30).setOrigin(.5).setTint(0xffffff);
@@ -40,55 +41,59 @@ class levelBuilder extends Phaser.Scene {
     let ratioY = game.config.height / window.innerHeight
     // items dropdown
     var colorText = this.add.bitmapText(75, 395, 'gothic', 'Items', 50).setOrigin(0, 1).setTint(0xffffff);
-    //this.itmeSelect()
-    let dropdownItems = this.add.dom(75, 400).createFromCache("dropdown").setOrigin(0);
+    this.itmeSelect()
+    /* let dropdownItems = this.add.dom(75, 400).createFromCache("dropdown").setOrigin(0);
     let color = dropdownItems.getChildByName("colors");
     color.value = defaultGame.items
     dropdownItems.setScale(Math.max(ratioX, ratioY));
     dropdownItems.addListener("click");
     dropdownItems.on("click", function (e) {
       defaultGame.items = e.target.value
-    }, this);
+    }, this); */
     //Rows dropdown
+    this.rowsSelect()
     var rowsText = this.add.bitmapText(700, 395, 'gothic', 'Rows', 50).setOrigin(0, 1).setTint(0xffffff);
 
-    let dropdownRows = this.add.dom(700, 400).createFromCache("dropdownR").setOrigin(0);
+    /* let dropdownRows = this.add.dom(700, 400).createFromCache("dropdownR").setOrigin(0);
     let rows = dropdownRows.getChildByName("rows");
     rows.value = defaultGame.rows
     dropdownRows.setScale(Math.max(ratioX, ratioY));
     dropdownRows.addListener("click");
     dropdownRows.on("click", function (e) {
       defaultGame.rows = e.target.value
-    }, this)
+    }, this) */
     //cols dropdown
+    this.colSelect()
     var colsText = this.add.bitmapText(400, 395, 'gothic', 'Cols', 50).setOrigin(0, 1).setTint(0xffffff);
 
-    let dropdownCols = this.add.dom(400, 400).createFromCache("dropdownC").setOrigin(0);
-    let cols = dropdownCols.getChildByName("cols");
-    cols.value = defaultGame.cols
-    dropdownCols.setScale(Math.max(ratioX, ratioY));
-    dropdownCols.addListener("click");
-    dropdownCols.on("click", function (e) {
-      defaultGame.cols = e.target.value
-    }, this)
+    /*  let dropdownCols = this.add.dom(400, 400).createFromCache("dropdownC").setOrigin(0);
+     let cols = dropdownCols.getChildByName("cols");
+     cols.value = defaultGame.cols
+     dropdownCols.setScale(Math.max(ratioX, ratioY));
+     dropdownCols.addListener("click");
+     dropdownCols.on("click", function (e) {
+       defaultGame.cols = e.target.value
+     }, this) */
     // moves dropdown
-    let dropdownMoves = this.add.dom(game.config.width / 2 - 200, 1200).createFromCache("dropdownM");
+    this.movesSelect()
+    /* let dropdownMoves = this.add.dom(game.config.width / 2 - 200, 1200).createFromCache("dropdownM");
     let moves = dropdownMoves.getChildByName("moves");
     moves.value = defaultGame.movesGoal
     dropdownMoves.setScale(Math.max(ratioX, ratioY));
     dropdownMoves.addListener("click");
     dropdownMoves.on("click", function (e) {
       defaultGame.movesGoal = e.target.value
-    }, this)
+    }, this) */
     // time dropdown
-    let dropdownTime = this.add.dom(game.config.width / 2 + 200, 1200).createFromCache("dropdownT");
+    this.timeSelect()
+    /* let dropdownTime = this.add.dom(game.config.width / 2 + 200, 1200).createFromCache("dropdownT");
     let movesd = dropdownTime.getChildByName("time");
     movesd.value = defaultGame.time
     dropdownTime.setScale(Math.max(ratioX, ratioY));
     dropdownTime.addListener("click");
     dropdownTime.on("click", function (e) {
       defaultGame.time = e.target.value
-    }, this)
+    }, this) */
     //allow rovers
     var rover = this.add.bitmapText(game.config.width / 2 - 25, 575, 'gothic', 'Rover', 50).setOrigin(1, .5).setTint(0xffffff);
     this.roverSwitch = this.add.image(game.config.width / 2 + 25, 575, 'switch', (this.roverOn) ? 1 : 0).setOrigin(0, .5).setInteractive().setScale(.9)
@@ -105,7 +110,10 @@ class levelBuilder extends Phaser.Scene {
     var fire = this.add.bitmapText(game.config.width / 2 - 25, 875, 'gothic', 'Fire', 50).setOrigin(1, .5).setTint(0xffffff);
     this.fireSwitch = this.add.image(game.config.width / 2 + 25, 875, 'switch', (this.fireOn) ? 1 : 0).setOrigin(0, .5).setInteractive().setScale(.9)
     this.fireSwitch.on('pointerdown', this.fireToggle, this)
-
+    //allow drop
+    var drop = this.add.bitmapText(game.config.width / 2 - 25, 975, 'gothic', 'Drop', 50).setOrigin(1, .5).setTint(0xffffff);
+    this.dropSwitch = this.add.image(game.config.width / 2 + 25, 975, 'switch', (this.dropOn) ? 1 : 0).setOrigin(0, .5).setInteractive().setScale(.9)
+    this.dropSwitch.on('pointerdown', this.dropToggle, this)
 
     var startMoves = this.add.bitmapText(game.config.width / 2 - 200, 1100, 'gothic', 'Moves', 70).setOrigin(.5).setTint(0xffffff);
     var playMoves = this.add.image(game.config.width / 2 - 200, 1375, 'play').setTint(0xf7484e).setScale(2).setInteractive()
@@ -177,6 +185,19 @@ class levelBuilder extends Phaser.Scene {
       this.fireSwitch.setFrame(1)
     }
   }
+  dropToggle() {
+    if (this.dropOn) {
+      this.dropOn = false
+      defaultGame.allowDrop = this.dropOn
+
+      this.dropSwitch.setFrame(0)
+    } else {
+      this.dropOn = true
+      defaultGame.allowDrop = this.dropOn
+      defaultGame.dropStartCount = Phaser.Math.Between(2, 5)
+      this.dropSwitch.setFrame(1)
+    }
+  }
   clickHandler() {
     localStorage.setItem('SD3lb1', JSON.stringify(defaultGame));
     gameMode = 'moves'
@@ -194,9 +215,109 @@ class levelBuilder extends Phaser.Scene {
     this.scene.launch('UI');
   }
   itmeSelect() {
-
-    var itemSelectText = this.add.bitmapText(75, 500, 'gothic', defaultGame.items, 50).setOrigin(.5).setTint(0xffffff);
+    var less = this.add.bitmapText(90, 435, 'gothic', '< ', 60).setOrigin(.5).setTint(0xcccccc).setInteractive();
+    var more = this.add.bitmapText(160, 435, 'gothic', ' >', 60).setOrigin(.5).setTint(0xcccccc).setInteractive();
+    var itemSelectText = this.add.bitmapText(125, 435, 'gothic', defaultGame.items, 60).setOrigin(.5).setTint(0xffffff);
     itemSelectText.value = this.itemsArray.indexOf(defaultGame.items)
-    console.log(itemSelectText.value)
+    less.on('pointerdown', function () {
+      defaultGame.items--
+      if (defaultGame.items < this.itemsArray[0]) {
+        defaultGame.items = this.itemsArray[this.itemsArray.length - 1]
+      }
+      itemSelectText.setText(defaultGame.items)
+    }, this)
+    more.on('pointerdown', function () {
+      defaultGame.items++
+      if (defaultGame.items > this.itemsArray[this.itemsArray.length - 1]) {
+        defaultGame.items = this.itemsArray[0]
+      }
+      itemSelectText.setText(defaultGame.items)
+    }, this)
+  }
+  colSelect() {
+    var less = this.add.bitmapText(415, 435, 'gothic', '< ', 60).setOrigin(.5).setTint(0xffffff).setInteractive();
+    var more = this.add.bitmapText(485, 435, 'gothic', ' >', 60).setOrigin(.5).setTint(0xffffff).setInteractive();
+    var colSelectText = this.add.bitmapText(450, 435, 'gothic', defaultGame.cols, 60).setOrigin(.5).setTint(0xffffff);
+    colSelectText.value = this.colsArray.indexOf(defaultGame.cols)
+    less.on('pointerdown', function () {
+      defaultGame.cols--
+      if (defaultGame.cols < this.colsArray[0]) {
+        defaultGame.cols = this.colsArray[this.colsArray.length - 1]
+      }
+      colSelectText.setText(defaultGame.cols)
+    }, this)
+    more.on('pointerdown', function () {
+      defaultGame.cols++
+      if (defaultGame.cols > this.colsArray[this.colsArray.length - 1]) {
+        defaultGame.cols = this.colsArray[0]
+      }
+      colSelectText.setText(defaultGame.cols)
+    }, this)
+  }
+  rowsSelect() {
+    var less = this.add.bitmapText(700, 435, 'gothic', '< ', 60).setOrigin(.5).setTint(0xffffff).setInteractive();
+    var more = this.add.bitmapText(800, 435, 'gothic', ' >', 60).setOrigin(.5).setTint(0xffffff).setInteractive();
+    var rowSelectText = this.add.bitmapText(750, 435, 'gothic', defaultGame.rows, 60).setOrigin(.5).setTint(0xffffff);
+    rowSelectText.value = this.colsArray.indexOf(defaultGame.rows)
+    less.on('pointerdown', function () {
+      defaultGame.rows--
+      if (defaultGame.rows < this.rowsArray[0]) {
+        defaultGame.rows = this.rowsArray[this.rowsArray.length - 1]
+      }
+      rowSelectText.setText(defaultGame.rows)
+    }, this)
+    more.on('pointerdown', function () {
+      defaultGame.rows++
+      if (defaultGame.rows > this.rowsArray[this.rowsArray.length - 1]) {
+        defaultGame.rows = this.rowsArray[0]
+      }
+      rowSelectText.setText(defaultGame.rows)
+    }, this)
+  }
+  movesSelect() {
+    var movesIndex = this.movesArray.indexOf(defaultGame.movesGoal)
+    var less = this.add.bitmapText(game.config.width / 2 - 255, 1200, 'gothic', '< ', 60).setOrigin(.5).setTint(0xffffff).setInteractive();
+    var more = this.add.bitmapText(game.config.width / 2 - 145, 1200, 'gothic', ' >', 60).setOrigin(.5).setTint(0xffffff).setInteractive();
+    var movesSelectText = this.add.bitmapText(game.config.width / 2 - 200, 1200, 'gothic', defaultGame.movesGoal, 60).setOrigin(.5).setTint(0xffffff);
+
+    less.on('pointerdown', function () {
+      movesIndex--
+      if (movesIndex < 0) {
+        movesIndex = this.movesArray.length - 1
+      }
+      defaultGame.movesGoal = this.movesArray[movesIndex]
+      movesSelectText.setText(defaultGame.movesGoal)
+    }, this)
+    more.on('pointerdown', function () {
+      movesIndex++
+      if (movesIndex == this.movesArray.length) {
+        movesIndex = 0
+      }
+      defaultGame.movesGoal = this.movesArray[movesIndex]
+      movesSelectText.setText(defaultGame.movesGoal)
+    }, this)
+  }
+  timeSelect() {
+    var timeIndex = this.timeArray.indexOf(defaultGame.time)
+    var less = this.add.bitmapText(game.config.width / 2 + 125, 1200, 'gothic', '< ', 60).setOrigin(.5).setTint(0xffffff).setInteractive();
+    var more = this.add.bitmapText(game.config.width / 2 + 275, 1200, 'gothic', ' >', 60).setOrigin(.5).setTint(0xffffff).setInteractive();
+    var timeSelectText = this.add.bitmapText(game.config.width / 2 + 200, 1200, 'gothic', this.timeClockArray[timeIndex], 60).setOrigin(.5).setTint(0xffffff);
+
+    less.on('pointerdown', function () {
+      timeIndex--
+      if (timeIndex < 0) {
+        timeIndex = this.timeArray.length - 1
+      }
+      defaultGame.time = this.timeArray[timeIndex]
+      timeSelectText.setText(this.timeClockArray[timeIndex])
+    }, this)
+    more.on('pointerdown', function () {
+      timeIndex++
+      if (timeIndex == this.timeArray.length) {
+        timeIndex = 0
+      }
+      defaultGame.time = this.timeArray[timeIndex]
+      timeSelectText.setText(this.timeClockArray[timeIndex])
+    }, this)
   }
 }
