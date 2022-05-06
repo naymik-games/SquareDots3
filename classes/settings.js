@@ -63,5 +63,6 @@ var defaultValues = {
   levelStatus: [0, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1],
   totalSquares: 0,
   group: 0,
-  currentLevel: 0
+  currentLevel: 0,
+  money: 0
 }

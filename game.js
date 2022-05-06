@@ -39,7 +39,8 @@ class playGame extends Phaser.Scene {
 
   }
   create() {
-    console.log(lbFlag)
+
+
     //var colors = [0xDC5639, 0x823957, 0x436475, 0x5FA34C, 0xFBBD4E];
     this.tally = null
     this.tally = {
@@ -212,6 +213,8 @@ class playGame extends Phaser.Scene {
       let col = Math.floor((pointer.x - this.xOffset) / this.dotSize);
       if (this.startOneDot) {
         if (this.b.board[row][col].type != 'dot') { return }
+        gameData.money -= 1
+        this.events.emit('removeMoney', { amount: 1 })
         this.dragging = true
         this.isSpecial = true
         this.pathDots = [{ row: row, col: col }]
@@ -225,6 +228,8 @@ class playGame extends Phaser.Scene {
       }
       if (this.startAllColor) {
         if (this.b.board[row][col].type != 'dot') { return }
+        gameData.money -= 2
+        this.events.emit('removeMoney', { amount: 2 })
         this.dragging = true
         this.isSpecial = true
         this.pathDots = this.b.findAll(this.valueAt(row, col))
@@ -238,6 +243,8 @@ class playGame extends Phaser.Scene {
       }
       if (this.startBombPU) {
         if (this.b.board[row][col].type != 'dot') { return }
+        gameData.money -= 3
+        this.events.emit('removeMoney', { amount: 3 })
         this.dragging = true
         this.isSpecial = true
         this.explodeBomb(row, col)
@@ -817,18 +824,39 @@ class playGame extends Phaser.Scene {
     puBack.displayHeight = 125
     this.oneDot = this.add.image(75, 1475, 'one_dot').setInteractive()
     this.oneDot.on('pointerdown', function () {
-      this.startOneDot = true
-      this.oneDot.setTint(0xff0000)
+      if (this.startOneDot) {
+        this.startOneDot = false
+        this.oneDot.clearTint()
+      } else {
+        if (gameData.money < 1) { return }
+        this.startOneDot = true
+        this.oneDot.setTint(0xff0000)
+      }
+
     }, this)
     this.allColor = this.add.image(200, 1475, 'all_color').setInteractive()
     this.allColor.on('pointerdown', function () {
-      this.startAllColor = true
-      this.allColor.setTint(0xff0000)
+      if (this.startAllColor) {
+        this.startAllColor = false
+        this.allColor.clearTint()
+      } else {
+        if (gameData.money < 2) { return }
+        this.startAllColor = true
+        this.allColor.setTint(0xff0000)
+      }
+
     }, this)
     this.bombPU = this.add.image(325, 1475, 'bombPU').setInteractive()
     this.bombPU.on('pointerdown', function () {
-      this.startBombPU = true
-      this.bombPU.setTint(0xff0000)
+      if (this.startBombPU) {
+        this.startBombPU = false
+        this.bombPU.clearTint()
+      } else {
+        if (gameData.money < 3) { return }
+        this.startBombPU = true
+        this.bombPU.setTint(0xff0000)
+      }
+
     }, this)
   }
 

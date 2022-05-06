@@ -13,6 +13,14 @@ class startGame extends Phaser.Scene {
       localStorage.setItem('SD3save', JSON.stringify(defaultValues));
       gameData = defaultValues;
     }
+    if ('money' in gameData) {
+
+    } else {
+      console.log('not there')
+      gameData.money = 0;
+      localStorage.removeItem('SD3save');
+      localStorage.setItem('SD3save', JSON.stringify(gameData));
+    }
     var lev = levels.length
     var stat = gameData.levelStatus.length
     //console.log('lev ' + lev + ', ' + 'stat ' + stat)
@@ -75,6 +83,10 @@ class startGame extends Phaser.Scene {
     var highChallenge = this.add.bitmapText(225, 1015, 'gothic', 'Level: ' + gameData.currentLevel, 40).setOrigin(0, .5).setTint(0xcccccc);
     playChallenge.setInteractive();
     playChallenge.on('pointerdown', this.clickHandler3, this);
+
+    var moneyIcon = this.add.image(game.config.width / 2 - 10, 1200, 'money').setOrigin(1, .5).setTint(0xF79A48).setScale(1.9).setInteractive()
+    var startChanllenge = this.add.bitmapText(game.config.width / 2 + 10, 1200, 'gothic', gameData.money, 120).setOrigin(0, .5).setTint(0xF79A48);
+
 
     var playBuilder = this.add.image(200, 1475, 'levelbuilder').setOrigin(1, .5).setTint(0xf7484e).setScale(1.9).setInteractive()
     var levelBuilder = this.add.bitmapText(225, 1440, 'gothic', 'LEVEL BUILDER ', 80).setOrigin(0, .5).setTint(0xffffff);

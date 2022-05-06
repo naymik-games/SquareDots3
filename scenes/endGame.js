@@ -72,6 +72,7 @@ class endGame extends Phaser.Scene {
 					var mess = 'You earned two stars!';
 				} else {
 					gameData.levelStatus[onLevel] = 3;
+					gameData.money++
 					var star1 = this.add.image(1450, 800, 'star').setScale(2);
 					var star2 = this.add.image(1450, 900, 'star').setScale(2);
 					var star3 = this.add.image(1450, 900, 'star').setScale(2);
@@ -123,6 +124,7 @@ class endGame extends Phaser.Scene {
 						gameData.mostDotsLB = this.totalBlocksRemoved;
 						var high = this.totalBlocksRemoved;
 						this.newBest = true;
+						gameData.money += 5
 					} else {
 						var high = gameData.mostDotsLB;
 					}
@@ -131,6 +133,7 @@ class endGame extends Phaser.Scene {
 						gameData.mostDotsTime = this.totalBlocksRemoved;
 						var high = this.totalBlocksRemoved;
 						this.newBest = true;
+						gameData.money += 5
 					} else {
 						var high = gameData.mostDotsTime;
 					}
@@ -139,6 +142,7 @@ class endGame extends Phaser.Scene {
 					gameData.mostDotsTime = this.totalBlocksRemoved;
 					var high = this.totalBlocksRemoved;
 					this.newBest = true;
+					gameData.money += 5
 				} else {
 					var high = gameData.mostDotsTime;
 				}
@@ -148,6 +152,7 @@ class endGame extends Phaser.Scene {
 						gameData.mostDotsLB = this.totalBlocksRemoved;
 						var high = this.totalBlocksRemoved;
 						this.newBest = true;
+						gameData.money += 5
 					} else {
 						var high = gameData.mostDotsLB;
 					}
@@ -158,6 +163,7 @@ class endGame extends Phaser.Scene {
 
 						var high = this.totalBlocksRemoved;
 						this.newBest = true;
+						gameData.money += 5
 					} else {
 						var high = gameData.mostDotsMoves;
 					}

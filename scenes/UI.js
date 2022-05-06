@@ -19,6 +19,10 @@ class UI extends Phaser.Scene {
     this.header.displayHeight = 225;
 
     this.initialTime = levelSettings.time
+
+    this.moneyIcon = this.add.image(85, 1590, 'money').setOrigin(1, .5).setScale(.8).setTint(0xF79A48)
+    this.moneyText = this.add.bitmapText(95, 1590, 'gothic', gameData.money, 50).setOrigin(0, .5).setTint(0xf5f5f5).setAlpha(1);
+
     if (gameMode == 'time') {
       var best = (lbFlag) ? gameData.mostDotsLB : gameData.mostDotsTime
       this.timedEvent = this.time.addEvent({ delay: 1000, callback: this.onEvent, callbackScope: this, loop: true });
@@ -67,6 +71,13 @@ class UI extends Phaser.Scene {
       //console.log('dots ' + string)
       this.totalclearedText.setText(string)
     }, this);
+
+    Main.events.on('removeMoney', function (data) {
+      this.damageEmit(this.moneyText.x, this.moneyText.y)
+      //console.log('dots ' + string)
+      this.moneyText.setText(gameData.money)
+    }, this);
+
 
     Main.events.on('moves', function (data) {
       this.movesLeft = data.moves;
