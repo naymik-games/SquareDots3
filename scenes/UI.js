@@ -47,13 +47,14 @@ class UI extends Phaser.Scene {
 
       }
     } else if (gameMode == 'challenge') {
-      this.totalMovesText = this.add.bitmapText(95, 100, 'gothic', levels[onLevel].movesGoal, 100).setOrigin(.5).setTint(0xf5f5f5).setAlpha(1);
+      if (lbFlag) {
+        this.totalMovesText = this.add.bitmapText(95, 100, 'gothic', defaultGame.movesGoal, 100).setOrigin(.5).setTint(0xf5f5f5).setAlpha(1);
+        var temp = 'LB';
+      } else {
+        this.totalMovesText = this.add.bitmapText(95, 100, 'gothic', levels[onLevel].movesGoal, 100).setOrigin(.5).setTint(0xf5f5f5).setAlpha(1);
+        var temp = onLevel + 1;
+      }
 
-      /* var levelBG = this.add.image(game.config.width, game.config.height, 'blank').setOrigin(1).setTint(0x333333).setAlpha(.8)
-      levelBG.displayWidth = 150;
-      levelBG.displayHeight = 175 */
-
-      var temp = onLevel + 1;
       this.levelText = this.add.bitmapText(635, 1590, 'gothic', 'L ' + temp, 50).setOrigin(0, .5).setTint(0xf7484e).setAlpha(1);
       this.totalclearedText = this.add.bitmapText(880, 1590, 'gothic', '0', 50).setOrigin(1, .5).setTint(0x4c4f4d).setAlpha(1);
       this.setupGoals();
@@ -168,7 +169,14 @@ class UI extends Phaser.Scene {
     var xSpace = 220
     var labelSize = 70
     var labelColor = 0x000000
-    Object.entries(levels[onLevel].win).forEach(([key, value]) => {
+    var winC
+    if (lbFlag) {
+      winC = defaultGame.win
+    } else {
+      winC = levels[onLevel].win
+    }
+
+    Object.entries(winC).forEach(([key, value]) => {
 
 
 

@@ -78,14 +78,14 @@ class startGame extends Phaser.Scene {
     playTime.on('pointerdown', this.clickHandler2, this);
 
 
-    var playChallenge = this.add.image(200, 975, 'levelsIcon').setOrigin(1, .5).setTint(0xf7484e).setScale(1.9).setInteractive()
-    var startChanllenge = this.add.bitmapText(225, 940, 'gothic', 'CHALLENGE', 80).setOrigin(0, .5).setTint(0xffffff);
-    var highChallenge = this.add.bitmapText(225, 1015, 'gothic', 'Level: ' + gameData.currentLevel, 40).setOrigin(0, .5).setTint(0xcccccc);
+    var playChallenge = this.add.image(200, 825, 'levelsIcon').setOrigin(1, .5).setTint(0xf7484e).setScale(1.9).setInteractive()
+    var startChanllenge = this.add.bitmapText(225, 780, 'gothic', 'CHALLENGE', 80).setOrigin(0, .5).setTint(0xffffff);
+    var highChallenge = this.add.bitmapText(225, 865, 'gothic', 'Level: ' + gameData.currentLevel, 40).setOrigin(0, .5).setTint(0xcccccc);
     playChallenge.setInteractive();
     playChallenge.on('pointerdown', this.clickHandler3, this);
 
-    var moneyIcon = this.add.image(game.config.width / 2 - 10, 1200, 'money').setOrigin(1, .5).setTint(0xF79A48).setScale(1.9).setInteractive()
-    var startChanllenge = this.add.bitmapText(game.config.width / 2 + 10, 1200, 'gothic', gameData.money, 120).setOrigin(0, .5).setTint(0xF79A48);
+    var moneyIcon = this.add.image(game.config.width / 2 - 10, 1100, 'money').setOrigin(1, .5).setTint(0xF79A48).setScale(1.9).setInteractive()
+    var startChanllenge = this.add.bitmapText(game.config.width / 2 + 10, 1090, 'gothic', gameData.money, 120).setOrigin(0, .5).setTint(0xF79A48);
 
 
     var playBuilder = this.add.image(200, 1475, 'levelbuilder').setOrigin(1, .5).setTint(0xf7484e).setScale(1.9).setInteractive()

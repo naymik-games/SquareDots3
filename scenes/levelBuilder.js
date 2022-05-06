@@ -32,6 +32,8 @@ class levelBuilder extends Phaser.Scene {
     this.bombOn = defaultGame.allowBomb
     this.fireOn = defaultGame.allowFire
     this.dropOn = defaultGame.allowDrop
+    this.iceOn = defaultGame.allowIce
+    this.wildOn = defaultGame.allowWild
     var title = this.add.bitmapText(game.config.width / 2, 100, 'gothic', 'Level Builder', 100).setOrigin(.5).setTint(0xf7484e);
     var text = 'Create and play your own level.'
     var info = this.add.bitmapText(game.config.width / 2, 175, 'gothic', text, 30).setOrigin(.5).setTint(0xffffff);
@@ -41,7 +43,7 @@ class levelBuilder extends Phaser.Scene {
     let ratioY = game.config.height / window.innerHeight
     // items dropdown
     var colorText = this.add.bitmapText(75, 395, 'gothic', 'Items', 50).setOrigin(0, 1).setTint(0xffffff);
-    this.itmeSelect()
+    this.itemSelect()
     /* let dropdownItems = this.add.dom(75, 400).createFromCache("dropdown").setOrigin(0);
     let color = dropdownItems.getChildByName("colors");
     color.value = defaultGame.items
@@ -95,32 +97,48 @@ class levelBuilder extends Phaser.Scene {
       defaultGame.time = e.target.value
     }, this) */
     //allow rovers
-    var rover = this.add.bitmapText(game.config.width / 2 - 25, 575, 'gothic', 'Rover', 50).setOrigin(1, .5).setTint(0xffffff);
-    this.roverSwitch = this.add.image(game.config.width / 2 + 25, 575, 'switch', (this.roverOn) ? 1 : 0).setOrigin(0, .5).setInteractive().setScale(.9)
+    var rover = this.add.bitmapText(200 - 25, 575, 'gothic', 'Rover', 50).setOrigin(1, .5).setTint(0xffffff);
+    this.roverSwitch = this.add.image(200 + 25, 575, 'switch', (this.roverOn) ? 1 : 0).setOrigin(0, .5).setInteractive().setScale(.9)
     this.roverSwitch.on('pointerdown', this.roverToggle, this)
     //allow gems
-    var gems = this.add.bitmapText(game.config.width / 2 - 25, 675, 'gothic', 'Gems', 50).setOrigin(1, .5).setTint(0xffffff);
-    this.gemSwitch = this.add.image(game.config.width / 2 + 25, 675, 'switch', (this.gemOn) ? 1 : 0).setOrigin(0, .5).setInteractive().setScale(.9)
+    var gems = this.add.bitmapText(200, 675, 'gothic', 'Gems', 50).setOrigin(1, .5).setTint(0xffffff);
+    this.gemSwitch = this.add.image(200 + 25, 675, 'switch', (this.gemOn) ? 1 : 0).setOrigin(0, .5).setInteractive().setScale(.9)
     this.gemSwitch.on('pointerdown', this.gemToggle, this)
     //allow bomb
-    var bombs = this.add.bitmapText(game.config.width / 2 - 25, 775, 'gothic', 'Bombs', 50).setOrigin(1, .5).setTint(0xffffff);
-    this.bombSwitch = this.add.image(game.config.width / 2 + 25, 775, 'switch', (this.bombOn) ? 1 : 0).setOrigin(0, .5).setInteractive().setScale(.9)
+    var bombs = this.add.bitmapText(200 - 25, 775, 'gothic', 'Bombs', 50).setOrigin(1, .5).setTint(0xffffff);
+    this.bombSwitch = this.add.image(200 + 25, 775, 'switch', (this.bombOn) ? 1 : 0).setOrigin(0, .5).setInteractive().setScale(.9)
     this.bombSwitch.on('pointerdown', this.bombToggle, this)
-    //allow fire
-    var fire = this.add.bitmapText(game.config.width / 2 - 25, 875, 'gothic', 'Fire', 50).setOrigin(1, .5).setTint(0xffffff);
-    this.fireSwitch = this.add.image(game.config.width / 2 + 25, 875, 'switch', (this.fireOn) ? 1 : 0).setOrigin(0, .5).setInteractive().setScale(.9)
-    this.fireSwitch.on('pointerdown', this.fireToggle, this)
+
     //allow drop
-    var drop = this.add.bitmapText(game.config.width / 2 - 25, 975, 'gothic', 'Drop', 50).setOrigin(1, .5).setTint(0xffffff);
-    this.dropSwitch = this.add.image(game.config.width / 2 + 25, 975, 'switch', (this.dropOn) ? 1 : 0).setOrigin(0, .5).setInteractive().setScale(.9)
+    var drop = this.add.bitmapText(200 - 25, 875, 'gothic', 'Drop', 50).setOrigin(1, .5).setTint(0xffffff);
+    this.dropSwitch = this.add.image(200 + 25, 875, 'switch', (this.dropOn) ? 1 : 0).setOrigin(0, .5).setInteractive().setScale(.9)
     this.dropSwitch.on('pointerdown', this.dropToggle, this)
+    //allow fire
+    var fire = this.add.bitmapText(700 - 25, 575, 'gothic', 'Fire', 50).setOrigin(1, .5).setTint(0xffffff);
+    this.fireSwitch = this.add.image(700 + 25, 575, 'switch', (this.fireOn) ? 1 : 0).setOrigin(0, .5).setInteractive().setScale(.9)
+    this.fireSwitch.on('pointerdown', this.fireToggle, this)
 
-    var startMoves = this.add.bitmapText(game.config.width / 2 - 200, 1100, 'gothic', 'Moves', 70).setOrigin(.5).setTint(0xffffff);
-    var playMoves = this.add.image(game.config.width / 2 - 200, 1375, 'play').setTint(0xf7484e).setScale(2).setInteractive()
+    //allow ice
+    var ice = this.add.bitmapText(700 - 25, 675, 'gothic', 'Ice', 50).setOrigin(1, .5).setTint(0xffffff);
+    this.iceSwitch = this.add.image(700 + 25, 675, 'switch', (this.iceOn) ? 1 : 0).setOrigin(0, .5).setInteractive().setScale(.9)
+    this.iceSwitch.on('pointerdown', this.iceToggle, this)
+
+    //allow wild
+    var wild = this.add.bitmapText(700 - 25, 775, 'gothic', 'Wild', 50).setOrigin(1, .5).setTint(0xffffff);
+    this.wildSwitch = this.add.image(700 + 25, 775, 'switch', (this.wildOn) ? 1 : 0).setOrigin(0, .5).setInteractive().setScale(.9)
+    this.wildSwitch.on('pointerdown', this.wildToggle, this)
+
+    var startChallenge = this.add.bitmapText(game.config.width / 2, 1100, 'gothic', 'Chal', 70).setOrigin(.5).setTint(0xffffff).setInteractive();
+    var playChallenge = this.add.image(game.config.width / 2, 1375, 'play').setTint(0xf7484e).setScale(2).setInteractive()
+    playChallenge.on('pointerdown', this.clickHandler3, this);
+
+
+    var startMoves = this.add.bitmapText(game.config.width / 2 - 300, 1100, 'gothic', 'Moves', 70).setOrigin(.5).setTint(0xffffff);
+    var playMoves = this.add.image(game.config.width / 2 - 300, 1375, 'play').setTint(0xf7484e).setScale(2).setInteractive()
     playMoves.on('pointerdown', this.clickHandler, this);
-    var startTime = this.add.bitmapText(game.config.width / 2 + 200, 1100, 'gothic', 'Time', 70).setOrigin(.5).setTint(0xffffff);
-    var playTime = this.add.image(game.config.width / 2 + 200, 1375, 'play').setTint(0xf7484e).setScale(2).setInteractive()
 
+    var startTime = this.add.bitmapText(game.config.width / 2 + 300, 1100, 'gothic', 'Time', 70).setOrigin(.5).setTint(0xffffff);
+    var playTime = this.add.image(game.config.width / 2 + 300, 1375, 'play').setTint(0xf7484e).setScale(2).setInteractive()
     playTime.on('pointerdown', this.clickHandler2, this);
 
     var exit = this.add.image(game.config.width / 2, 1550, 'menu_icons', 5).setInteractive()
@@ -149,7 +167,7 @@ class levelBuilder extends Phaser.Scene {
   gemToggle() {
     if (this.gemOn) {
       this.gemOn = false
-      defaultGame.allowRover = this.gemOn
+      defaultGame.allowGem = this.gemOn
 
       this.gemSwitch.setFrame(0)
     } else {
@@ -185,6 +203,32 @@ class levelBuilder extends Phaser.Scene {
       this.fireSwitch.setFrame(1)
     }
   }
+  iceToggle() {
+    if (this.iceOn) {
+      this.iceOn = false
+      defaultGame.allowIce = this.iceOn
+
+      this.iceSwitch.setFrame(0)
+    } else {
+      this.iceOn = true
+      defaultGame.allowIce = this.iceOn
+      defaultGame.iceStartCount = Phaser.Math.Between(5, 10)
+      this.iceSwitch.setFrame(1)
+    }
+  }
+  wildToggle() {
+    if (this.wildOn) {
+      this.wildOn = false
+      defaultGame.allowWild = this.wildOn
+
+      this.wildSwitch.setFrame(0)
+    } else {
+      this.wildOn = true
+      defaultGame.allowWild = this.wildOn
+      defaultGame.wildStartCount = Phaser.Math.Between(1, 5)
+      this.wildSwitch.setFrame(1)
+    }
+  }
   dropToggle() {
     if (this.dropOn) {
       this.dropOn = false
@@ -214,7 +258,16 @@ class levelBuilder extends Phaser.Scene {
     this.scene.start('playGame');
     this.scene.launch('UI');
   }
-  itmeSelect() {
+  clickHandler3() {
+    this.buildChallenge()
+    localStorage.setItem('SD3lb1', JSON.stringify(defaultGame));
+    gameMode = 'challenge'
+    lbFlag = true
+    this.scene.stop()
+    this.scene.start('playGame');
+    this.scene.launch('UI');
+  }
+  itemSelect() {
     var less = this.add.bitmapText(90, 435, 'gothic', '< ', 60).setOrigin(.5).setTint(0xcccccc).setInteractive();
     var more = this.add.bitmapText(160, 435, 'gothic', ' >', 60).setOrigin(.5).setTint(0xcccccc).setInteractive();
     var itemSelectText = this.add.bitmapText(125, 435, 'gothic', defaultGame.items, 60).setOrigin(.5).setTint(0xffffff);
@@ -276,9 +329,9 @@ class levelBuilder extends Phaser.Scene {
   }
   movesSelect() {
     var movesIndex = this.movesArray.indexOf(defaultGame.movesGoal)
-    var less = this.add.bitmapText(game.config.width / 2 - 255, 1200, 'gothic', '< ', 60).setOrigin(.5).setTint(0xffffff).setInteractive();
-    var more = this.add.bitmapText(game.config.width / 2 - 145, 1200, 'gothic', ' >', 60).setOrigin(.5).setTint(0xffffff).setInteractive();
-    var movesSelectText = this.add.bitmapText(game.config.width / 2 - 200, 1200, 'gothic', defaultGame.movesGoal, 60).setOrigin(.5).setTint(0xffffff);
+    var less = this.add.bitmapText(game.config.width / 2 - 180, 1200, 'gothic', '< ', 60).setOrigin(.5).setTint(0xffffff).setInteractive();
+    var more = this.add.bitmapText(game.config.width / 2 - 70, 1200, 'gothic', ' >', 60).setOrigin(.5).setTint(0xffffff).setInteractive();
+    var movesSelectText = this.add.bitmapText(game.config.width / 2 - 125, 1200, 'gothic', defaultGame.movesGoal, 60).setOrigin(.5).setTint(0xffffff);
 
     less.on('pointerdown', function () {
       movesIndex--
@@ -299,9 +352,9 @@ class levelBuilder extends Phaser.Scene {
   }
   timeSelect() {
     var timeIndex = this.timeArray.indexOf(defaultGame.time)
-    var less = this.add.bitmapText(game.config.width / 2 + 125, 1200, 'gothic', '< ', 60).setOrigin(.5).setTint(0xffffff).setInteractive();
-    var more = this.add.bitmapText(game.config.width / 2 + 275, 1200, 'gothic', ' >', 60).setOrigin(.5).setTint(0xffffff).setInteractive();
-    var timeSelectText = this.add.bitmapText(game.config.width / 2 + 200, 1200, 'gothic', this.timeClockArray[timeIndex], 60).setOrigin(.5).setTint(0xffffff);
+    var less = this.add.bitmapText(game.config.width / 2 + 225, 1200, 'gothic', '< ', 60).setOrigin(.5).setTint(0xffffff).setInteractive();
+    var more = this.add.bitmapText(game.config.width / 2 + 375, 1200, 'gothic', ' >', 60).setOrigin(.5).setTint(0xffffff).setInteractive();
+    var timeSelectText = this.add.bitmapText(game.config.width / 2 + 300, 1200, 'gothic', this.timeClockArray[timeIndex], 60).setOrigin(.5).setTint(0xffffff);
 
     less.on('pointerdown', function () {
       timeIndex--
@@ -320,4 +373,50 @@ class levelBuilder extends Phaser.Scene {
       timeSelectText.setText(this.timeClockArray[timeIndex])
     }, this)
   }
+  buildChallenge() {
+    var winCount = 0
+    var winC = {}
+    if (defaultGame.allowRover) {
+      winC.rover = Phaser.Math.Between(defaultGame.roverStartCount - 1, defaultGame.roverStartCount + 2)
+      winCount++
+    }
+    if (defaultGame.allowGem) {
+      winC.gem = defaultGame.gemStartCount
+      winCount++
+    }
+    if (defaultGame.allowDrop) {
+      winC.drop = Phaser.Math.Between(defaultGame.dropStartCount, defaultGame.dropStartCount + 4)
+      winCount++
+    }
+    if (defaultGame.allowBomb) {
+      winC.bomb = defaultGame.bombStartCount
+      winCount++
+    }
+    if (defaultGame.allowIce) {
+      winC.ice = defaultGame.iceStartCount
+      winCount++
+    }
+    while (winCount < 6) {
+      var color = Phaser.Math.Between(0, defaultGame.items - 1)
+      var count = Phaser.Math.Between(5, defaultGame.movesGoal)
+      if (color == 0) {
+        winC.orange = count
+      } else if (color == 1) {
+        winC.purple = count
+      } else if (color == 2) {
+        winC.blue = count
+      } else if (color == 3) {
+        winC.green = count
+      } else if (color == 4) {
+        winC.brown = count
+      } else if (color == 5) {
+        winC.brown = count
+      }
+      winCount++
+    }
+    defaultGame.win = winC
+
+
+  }
+
 }

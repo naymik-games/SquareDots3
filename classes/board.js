@@ -99,6 +99,43 @@ class Board {
     });
     return positions;
   }
+  findAllDots() {
+    var positions = [];
+    this.board.forEach(function (row, r) {
+      row.forEach(function (dot, c) {
+        if (dot.type == 'dot') {
+          positions.push({ row: r, col: c });
+        }
+      });
+    });
+    return positions;
+  }
+  //gets all the color values, shuffles, and returns
+  findAllDotValues() {
+    var positions = [];
+    this.board.forEach(function (row, r) {
+      row.forEach(function (dot, c) {
+        if (dot.type == 'dot') {
+          positions.push(dot.value);
+          dot.image.clearTint()
+        }
+      });
+    });
+    this.shuffle(positions)
+    this.applyShuffle(positions)
+  }
+  applyShuffle(dotValues) {
+    var index = 0
+    this.board.forEach(function (row, r) {
+      row.forEach(function (dot, c) {
+        if (dot.type == 'dot') {
+          dot.value = dotValues[index]
+          dot.image.setTint(colors[dotValues[index]])
+          index++
+        }
+      });
+    });
+  }
   addCross(row1, col) {
     return this.addcol(col)
     //var crossC = this.addcol(col)
@@ -218,6 +255,18 @@ class Board {
           }
         }
         this.board[tile.row][tile.col].value = gameOptions.dropValue
+      }
+    }
+    if (levelSettings.allowWild) {
+      if (Phaser.Math.Between(1, 100) < 25) {
+        var go = false
+        while (!go) {
+          var tile = result[Phaser.Math.Between(0, result.length - 1)]
+          if (this.board[tile.row][tile.col].value < this.items - 1) {
+            go = true
+          }
+        }
+        this.board[tile.row][tile.col].value = gameOptions.wildValue
       }
     }
     if (levelSettings.allowGem) {
@@ -403,6 +452,23 @@ class Board {
     }
     return { row: nR, col: nC }
 
+  }
+  shuffle(array) {
+    let currentIndex = array.length, randomIndex;
+
+    // While there remain elements to shuffle.
+    while (currentIndex != 0) {
+
+      // Pick a remaining element.
+      randomIndex = Math.floor(Math.random() * currentIndex);
+      currentIndex--;
+
+      // And swap it with the current element.
+      [array[currentIndex], array[randomIndex]] = [
+        array[randomIndex], array[currentIndex]];
+    }
+
+    return array;
   }
 
 }

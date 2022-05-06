@@ -60,7 +60,12 @@ class playGame extends Phaser.Scene {
       dots: 0
     }
     if (gameMode == 'challenge') {
-      levelSettings = levels[onLevel]
+      if (lbFlag) {
+        levelSettings = defaultGame
+      } else {
+        levelSettings = levels[onLevel]
+      }
+
     } else {
       levelSettings = defaultGame
     }
@@ -81,6 +86,8 @@ class playGame extends Phaser.Scene {
     this.startAllColor = false
     this.startOneDot = false
     this.startBombPU = false
+    this.startPaintPU = false
+    this.startShufflePU = false
     this.b = new Board(this.rows, this.cols, this.items);
     this.e = new Extra(this.rows, this.cols, this.items)
     //console.log(this.e.extra)
@@ -252,6 +259,42 @@ class playGame extends Phaser.Scene {
         this.bombPU.clearTint()
 
         this.startBombPU = false
+        //this.removeGems()
+        //this.removeOne(row, col)
+        return
+      }
+      if (this.startPaintPU) {
+        if (this.b.board[row][col].type != 'dot') { return }
+        gameData.money -= 5
+        this.events.emit('removeMoney', { amount: 5 })
+        this.dragging = true
+        this.isSpecial = true
+        let dots = this.b.findAllDots()
+        dots.forEach(function (dot) {
+          this.b.board[dot.row][dot.col].value = this.b.board[row][col].value
+          this.b.board[dot.row][dot.col].image.setTint(colors[this.b.board[row][col].value])
+        }.bind(this));
+        this.explode(row, col)
+
+        this.paintPU.clearTint()
+
+        this.startPaintPU = false
+        //this.removeGems()
+        //this.removeOne(row, col)
+        return
+      }
+      if (this.startShufflePU) {
+        if (this.b.board[row][col].type != 'dot') { return }
+        gameData.money -= 4
+        this.events.emit('removeMoney', { amount: 4 })
+        this.dragging = true
+        this.isSpecial = true
+        this.b.findAllDotValues()
+
+
+        this.shufflePU.clearTint()
+
+        this.startShufflePU = false
         //this.removeGems()
         //this.removeOne(row, col)
         return
@@ -492,6 +535,13 @@ class playGame extends Phaser.Scene {
         sprite.setTint(colors[ran])
         this.b.board[movement.row][movement.col].gemColor = ran
         this.b.board[movement.row][movement.col].type = 'gem'
+        //add wild
+      } else if (this.b.board[movement.row][movement.col].value == gameOptions.wildValue) {
+        sprite.setTexture('bomb1')
+
+        sprite.setTint(gameOptions.wildColor)
+
+        this.b.board[movement.row][movement.col].type = 'wild'
         //add rover
       } else if (this.b.board[movement.row][movement.col].value == gameOptions.roverValue) {
         var ran = Math.floor(Math.random() * this.items)
@@ -855,6 +905,30 @@ class playGame extends Phaser.Scene {
         if (gameData.money < 3) { return }
         this.startBombPU = true
         this.bombPU.setTint(0xff0000)
+      }
+
+    }, this)
+    this.paintPU = this.add.image(450, 1475, 'paint').setInteractive()
+    this.paintPU.on('pointerdown', function () {
+      if (this.startPaintPU) {
+        this.startPaintPU = false
+        this.paintPU.clearTint()
+      } else {
+        if (gameData.money < 5) { return }
+        this.startPaintPU = true
+        this.paintPU.setTint(0xff0000)
+      }
+
+    }, this)
+    this.shufflePU = this.add.image(575, 1475, 'shuffle').setInteractive()
+    this.shufflePU.on('pointerdown', function () {
+      if (this.startShufflePU) {
+        this.startShufflePU = false
+        this.shufflePU.clearTint()
+      } else {
+        if (gameData.money < 5) { return }
+        this.startShufflePU = true
+        this.shufflePU.setTint(0xff0000)
       }
 
     }, this)

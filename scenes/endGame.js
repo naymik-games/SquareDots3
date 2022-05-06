@@ -34,12 +34,15 @@ class endGame extends Phaser.Scene {
 			if (this.outcome == 1) {
 				this.timeline = this.tweens.createTimeline();
 				var message = 'Success!'
-				if (gameData.levelStatus[onLevel + 1] == -1) {
+				if (!lbFlag && gameData.levelStatus[onLevel + 1] == -1) {
 					gameData.levelStatus[onLevel + 1] = 0;
 				}
 
 				if (this.movesLeft < 2) {
-					gameData.levelStatus[onLevel] = 1;
+					if (!lbFlag) {
+						gameData.levelStatus[onLevel] = 1;
+					}
+
 					var star1 = this.add.image(1450, 850, 'star').setScale(2);
 
 					this.timeline.add({
@@ -51,7 +54,10 @@ class endGame extends Phaser.Scene {
 					})
 					var mess = 'You earned one star!';
 				} else if (this.movesLeft < 5) {
-					gameData.levelStatus[onLevel] = 2;
+					if (!lbFlag) {
+						gameData.levelStatus[onLevel] = 2;
+					}
+
 					var star2 = this.add.image(1450, 850, 'star').setScale(2);
 					var star3 = this.add.image(1450, 850, 'star').setScale(2);
 
@@ -71,7 +77,10 @@ class endGame extends Phaser.Scene {
 					})
 					var mess = 'You earned two stars!';
 				} else {
-					gameData.levelStatus[onLevel] = 3;
+					if (!lbFlag) {
+						gameData.levelStatus[onLevel] = 3;
+					}
+
 					gameData.money++
 					var star1 = this.add.image(1450, 800, 'star').setScale(2);
 					var star2 = this.add.image(1450, 900, 'star').setScale(2);
@@ -100,9 +109,11 @@ class endGame extends Phaser.Scene {
 					})
 					var mess = 'You earned three stars!';
 				}
+				if (!lbFlag) {
+					gameData.currentLevel = onLevel + 1
+					gameData.group = onGroup
+				}
 
-				gameData.currentLevel = onLevel + 1
-				gameData.group = onGroup
 
 
 				this.timeline.play();
@@ -180,7 +191,10 @@ class endGame extends Phaser.Scene {
 
 		let messText = this.add.bitmapText(450, 625, 'gothic', mess, 60).setOrigin(.5).setTint(0xf7484e);
 		this.previewBox.add(messText);
-
+		if (lbFlag) {
+			var flag = this.add.bitmapText(300, 1150, 'gothic', 'LB', 50).setOrigin(0, .5).setTint(0xf7484e).setAlpha(1);
+			this.previewBox.add(flag);
+		}
 
 		//time or moves
 		if (gameMode != 'challenge') {
@@ -203,6 +217,10 @@ class endGame extends Phaser.Scene {
 
 		var playText = this.add.bitmapText(625, 1150, 'gothic', 'CONTINUE', 50).setOrigin(.5).setTint(0xffffff).setAlpha(1).setInteractive();
 		this.previewBox.add(playText);
+
+
+
+
 		//var cancelText = this.add.bitmapText(175,1150, 'gothic', '[X]', 50).setOrigin(.5).setTint(0x000000).setAlpha(1).setInteractive();
 		this.replayIcon = this.add.image(175, 1150, 'menu_icons', 1).setInteractive().setTint(0xf7484e);
 		this.previewBox.add(this.replayIcon);
@@ -232,7 +250,12 @@ class endGame extends Phaser.Scene {
 		this.scene.stop('endGame');
 		this.scene.stop('UI');
 		if (gameMode == 'challenge') {
-			this.scene.start('selectGame')
+			if (lbFlag) {
+				this.scene.start('levelBuilder')
+			} else {
+				this.scene.start('selectGame')
+			}
+
 		} else {
 			this.scene.start('startGame')
 		}
