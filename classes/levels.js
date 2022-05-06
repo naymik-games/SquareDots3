@@ -4,8 +4,8 @@ let groups = [
   { numLevels: 12, startNum: 0, title: 'Preview' },
   { numLevels: 12, startNum: 12, title: 'Square it up' },
   { numLevels: 12, startNum: 24, title: 'Drop, Drop' },
-  /*{ numLevels: 12, startNum: 36, title: 'Ice Break' },
-  { numLevels: 12, startNum: 48, title: 'Wild Time' } */
+  { numLevels: 12, startNum: 36, title: 'Gem Gem' },
+  /* { numLevels: 12, startNum: 48, title: 'Wild Time' } */
 ];
 let levels = [
   { tittle: "fasfsdf", rows: 8, cols: 5, items: 5, background: 0xfafafa, allowWild: false, wildStartCount: 0, allowDrop: false, dropStartCount: 0, allowGem: false, gemsStartCount: 0, movesGoal: 20, allowIce: false, iceStartCount: 0, allowFire: false, fireStartCount: 0, allowBomb: false, bombStartCount: 0, allowRover: true, roverStartCount: 4, win: { orange: 4, rover: 3, }, blocks: [{ "row": 1, "col": 1 }, { "row": 1, "col": 2 }, { "row": 2, "col": 1 }, { "row": 2, "col": 2 }] },
