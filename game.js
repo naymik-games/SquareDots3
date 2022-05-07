@@ -574,17 +574,19 @@ class playGame extends Phaser.Scene {
           moved--;
           if (moved == 0) {
 
-            if (this.gemCheck()) {
-              this.isSpecial = true;
-              this.removeGems()
-            } else if (this.roverCheck()) {
-
-            } else if (this.roverExplode.length > 0) {
+            if (this.roverExplode.length > 0) {
               for (var i = 0; i < this.roverExplode.length; i++) {
                 // console.log('rover explode')
                 this.explodeBomb(this.roverExplode[i].row, this.roverExplode[i].col)
               }
 
+              this.isSpecial = true;
+              this.removeGems()
+            } else if (this.roverCheck()) {
+
+
+
+            } else if (this.gemCheck()) {
               this.isSpecial = true;
               this.removeGems()
             } else if (this.bombToExplode.length > 0) {
@@ -675,6 +677,8 @@ class playGame extends Phaser.Scene {
   }
   roverCheck() {
     var rovers = this.findRovers()
+    var count = 0
+    // if(alreadyMoved){return false}
     //console.log(rovers)
     if (rovers.length > 0) {
       rovers.forEach(rover => {
@@ -693,7 +697,14 @@ class playGame extends Phaser.Scene {
           duration: 200,
           onCompleteScope: this,
           onComplete: function () {
-            return false
+
+            //this.alreadyMoved = true;
+
+            count++
+            if (count == rovers.length - 1) {
+              return false
+            }
+
             //this.canPick = true;
             //this.dragging = false;
 
@@ -712,6 +723,8 @@ class playGame extends Phaser.Scene {
 
       });
 
+    } else {
+      return false
     }
 
   }
