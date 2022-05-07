@@ -582,10 +582,6 @@ class playGame extends Phaser.Scene {
 
               this.isSpecial = true;
               this.removeGems()
-            } else if (this.roverCheck()) {
-
-
-
             } else if (this.gemCheck()) {
               this.isSpecial = true;
               this.removeGems()
@@ -598,6 +594,10 @@ class playGame extends Phaser.Scene {
               this.bombToExplode = []
               this.isSpecial = true;
               this.removeGems()
+
+            } else if (this.roverCheck()) {
+
+
 
             } else if (this.dropCheck()) {
               this.isSpecial = true;
@@ -640,6 +640,7 @@ class playGame extends Phaser.Scene {
     //console.log(result)
     return result
   }
+
   gemCheck() {
     let result = false
     if (!levelSettings.allowGem) {

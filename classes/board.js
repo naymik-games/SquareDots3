@@ -246,7 +246,13 @@ class Board {
     }
 
     if (levelSettings.allowDrop) {
-      if (Phaser.Math.Between(1, 100) < 25) {
+      var chance = 0
+      if (this.dropCount() == 0) {
+        chance = 50
+      } else {
+        chance = 11
+      }
+      if (Phaser.Math.Between(1, 100) < chance) {
         var go = false
         while (!go) {
           var tile = result[Phaser.Math.Between(0, result.length - 1)]
@@ -415,6 +421,17 @@ class Board {
     if (result.length > 0) {
       return true;
     }
+  }
+
+  dropCount() {
+    let result = 0
+
+    for (let j = 0; j < this.cols; j++) {
+      if (gameOptions.dropValue == this.board[this.rows - 1][j].value) {
+        result++
+      }
+    }
+    return result
   }
   //returns array of valid neighbor coord
   getNeighbors(row, column) {
