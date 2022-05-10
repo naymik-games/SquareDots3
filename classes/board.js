@@ -82,6 +82,9 @@ class Board {
       }
     }
   }
+  isWild(row, col) {
+    return this.board[row][col].value == gameOptions.wildValue
+  }
   valid(row, col) {
     return row >= 0 && row < this.rows && col >= 0 && col < this.cols //&& this.gameArray[row] != undefined && this.gameArray[row][col] != undefined;
   }
@@ -382,6 +385,9 @@ class Board {
   }
   valueAt(row, col) {
     return this.board[row][col].value
+  }
+  setValue(row, col, val) {
+    this.board[row][col].value = val
   }
   areNext(dot1, dot2) {
     //diangonal
