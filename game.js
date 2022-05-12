@@ -327,8 +327,8 @@ class playGame extends Phaser.Scene {
         if (this.isSame(newDot, previous)) {
           var dot = this.pathDots.pop();
           this.b.board[dot.row][dot.col].image.setAlpha(1)
-          /* var line = this.lineArray.pop()
-          line.setAlpha(0) */
+          var line = this.lineArray.pop()
+          line.setAlpha(0).destroy()
           // drawLine();
           return;
         }
@@ -336,12 +336,15 @@ class playGame extends Phaser.Scene {
 
       //square
       if (this.inPath(newDot)) {
-        var line = new Phaser.Geom.Line(this.b.board[current.row][current.col].image.x, this.b.board[current.row][current.col].image.y, this.b.board[row][col].image.x, this.b.board[row][col].image.y);
+        /* var line = new Phaser.Geom.Line(this.b.board[current.row][current.col].image.x, this.b.board[current.row][current.col].image.y, this.b.board[row][col].image.x, this.b.board[row][col].image.y);
         this.graphics.lineStyle(10, colors[this.b.board[current.row][current.col].value], 1);
         this.graphics.strokeLineShape(line);
         this.graphics.fillPointShape(line.getPointA(), 20);
         this.graphics.fillStyle(colors[this.b.board[current.row][current.col].value]);
         this.graphics.fillPointShape(line.getPointB(), 20);
+        this.lineArray.push(line) */
+        var line = this.add.line(null, null, this.b.board[current.row][current.col].image.x, this.b.board[current.row][current.col].image.y, this.b.board[row][col].image.x, this.b.board[row][col].image.y, colors[this.b.board[current.row][current.col].value]).setOrigin(0);
+        line.setLineWidth(10)
         this.lineArray.push(line)
         this.square = true
         this.pathDots = this.b.findAll(this.valueAt(this.pathDots[0].row, this.pathDots[0].col))
@@ -357,14 +360,16 @@ class playGame extends Phaser.Scene {
       //new
       this.b.board[row][col].image.setAlpha(this.selectAlpha)
 
-      var line = new Phaser.Geom.Line(this.b.board[current.row][current.col].image.x, this.b.board[current.row][current.col].image.y, this.b.board[row][col].image.x, this.b.board[row][col].image.y);
+      /* var line = new Phaser.Geom.Line(this.b.board[current.row][current.col].image.x, this.b.board[current.row][current.col].image.y, this.b.board[row][col].image.x, this.b.board[row][col].image.y);
       this.graphics.lineStyle(10, colors[this.b.board[current.row][current.col].value], 1);
       this.graphics.strokeLineShape(line);
       this.graphics.fillPointShape(line.getPointA(), 20);
       this.graphics.fillStyle(colors[this.b.board[current.row][current.col].value]);
-      this.graphics.fillPointShape(line.getPointB(), 20);
+      this.graphics.fillPointShape(line.getPointB(), 20); */
+      var line = this.add.line(null, null, this.b.board[current.row][current.col].image.x, this.b.board[current.row][current.col].image.y, this.b.board[row][col].image.x, this.b.board[row][col].image.y, colors[this.b.board[current.row][current.col].value]).setOrigin(0);
+      line.setLineWidth(10)
       this.lineArray.push(line)
-
+      //console.log(this.lineArray)
       this.pathDots.push(newDot)
     }
   }
@@ -392,7 +397,14 @@ class playGame extends Phaser.Scene {
     } else {
       var num = 1
     }
+    //remove line path and graphics
     this.graphics.clear()
+    if (this.lineArray.length > 0) {
+      this.lineArray.forEach(function (line) {
+        line.destroy()
+      }.bind(this))
+      this.lineArray = []
+    }
     if (this.dragging) {
       this.canPick = false;
       if (this.pathDots.length > num) {
@@ -592,7 +604,6 @@ class playGame extends Phaser.Scene {
       this.removeGems()
     } else if (this.bombToExplode.length > 0) {
       for (var i = 0; i < this.bombToExplode.length; i++) {
-        //console.log('rover explode')
         var bomb = this.bombToExplode.pop()
         this.explodeBomb(bomb.row, bomb.col)
       }
@@ -631,6 +642,7 @@ class playGame extends Phaser.Scene {
     for (let j = 0; j < this.cols; j++) {
       if (gameOptions.dropValue == this.b.board[this.rows - 1][j].value) {
         this.pathDots.push({ row: this.rows - 1, col: j })
+        //console.log(this.pathDots)
         result = true
         //console.log('found drop')
       }
