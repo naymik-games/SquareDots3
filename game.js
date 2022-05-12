@@ -90,19 +90,13 @@ class playGame extends Phaser.Scene {
     this.startShufflePU = false
     this.b = new Board(this.rows, this.cols, this.items);
     this.e = new Extra(this.rows, this.cols, this.items)
-    //console.log(this.e.extra)
+
     this.squareBox = this.add.graphics();
     this.squareBox.lineStyle(10, 0x00ff00, 1);
     this.squareBox.fillStyle(0x000000, 0);
     this.drawBoard()
     this.drawExtra()
-    this.graphics = this.add.graphics({
-      lineStyle: {
-        width: 10,
-        color: 0xffffff,
-        alpha: 1
-      }
-    });
+
     const config1 = {
       key: 'burst1',
       frames: 'burst',
@@ -209,10 +203,11 @@ class playGame extends Phaser.Scene {
   }
   gemSelect(pointer) {
     if (pointer.y > this.yOffset + this.rows * this.dotSize) { return }
-    this.isSpecial = false
+
     this.pathValue = null
     this.square = false
     this.lineArray = []
+    this.rectArray = []
     this.bombToExplode = []
 
     this.stopFire = false
@@ -224,7 +219,7 @@ class playGame extends Phaser.Scene {
         gameData.money -= 1
         this.events.emit('removeMoney', { amount: 1 })
         this.dragging = true
-        this.isSpecial = true
+
         this.pathDots = [{ row: row, col: col }]
         this.b.board[row][col].image.setAlpha(this.selectAlpha)
         this.oneDot.clearTint()
@@ -239,7 +234,7 @@ class playGame extends Phaser.Scene {
         gameData.money -= 2
         this.events.emit('removeMoney', { amount: 2 })
         this.dragging = true
-        this.isSpecial = true
+
         this.pathDots = this.b.findAll(this.valueAt(row, col))
         this.highlightAll()
         this.allColor.clearTint()
@@ -254,7 +249,7 @@ class playGame extends Phaser.Scene {
         gameData.money -= 3
         this.events.emit('removeMoney', { amount: 3 })
         this.dragging = true
-        this.isSpecial = true
+
         this.explodeBomb(row, col)
 
         this.bombPU.clearTint()
@@ -269,7 +264,7 @@ class playGame extends Phaser.Scene {
         gameData.money -= 5
         this.events.emit('removeMoney', { amount: 5 })
         this.dragging = true
-        this.isSpecial = true
+
         let dots = this.b.findAllDots()
         dots.forEach(function (dot) {
           this.b.board[dot.row][dot.col].value = this.b.board[row][col].value
@@ -290,7 +285,7 @@ class playGame extends Phaser.Scene {
         gameData.money -= 4
         this.events.emit('removeMoney', { amount: 4 })
         this.dragging = true
-        this.isSpecial = true
+
         this.b.findAllDotValues()
 
 
@@ -329,23 +324,21 @@ class playGame extends Phaser.Scene {
           this.b.board[dot.row][dot.col].image.setAlpha(1)
           var line = this.lineArray.pop()
           line.setAlpha(0).destroy()
-          // drawLine();
+          var rect = this.rectArray.pop()
+          rect.setAlpha(0).destroy()
+
           return;
         }
       }
 
       //square
       if (this.inPath(newDot)) {
-        /* var line = new Phaser.Geom.Line(this.b.board[current.row][current.col].image.x, this.b.board[current.row][current.col].image.y, this.b.board[row][col].image.x, this.b.board[row][col].image.y);
-        this.graphics.lineStyle(10, colors[this.b.board[current.row][current.col].value], 1);
-        this.graphics.strokeLineShape(line);
-        this.graphics.fillPointShape(line.getPointA(), 20);
-        this.graphics.fillStyle(colors[this.b.board[current.row][current.col].value]);
-        this.graphics.fillPointShape(line.getPointB(), 20);
-        this.lineArray.push(line) */
+
         var line = this.add.line(null, null, this.b.board[current.row][current.col].image.x, this.b.board[current.row][current.col].image.y, this.b.board[row][col].image.x, this.b.board[row][col].image.y, colors[this.b.board[current.row][current.col].value]).setOrigin(0);
         line.setLineWidth(10)
         this.lineArray.push(line)
+        var rect = this.add.rectangle(this.b.board[row][col].image.x, this.b.board[row][col].image.y, 20, 20, colors[this.b.board[current.row][current.col].value])
+        this.rectArray.push(rect)
         this.square = true
         this.pathDots = this.b.findAll(this.valueAt(this.pathDots[0].row, this.pathDots[0].col))
 
@@ -360,16 +353,13 @@ class playGame extends Phaser.Scene {
       //new
       this.b.board[row][col].image.setAlpha(this.selectAlpha)
 
-      /* var line = new Phaser.Geom.Line(this.b.board[current.row][current.col].image.x, this.b.board[current.row][current.col].image.y, this.b.board[row][col].image.x, this.b.board[row][col].image.y);
-      this.graphics.lineStyle(10, colors[this.b.board[current.row][current.col].value], 1);
-      this.graphics.strokeLineShape(line);
-      this.graphics.fillPointShape(line.getPointA(), 20);
-      this.graphics.fillStyle(colors[this.b.board[current.row][current.col].value]);
-      this.graphics.fillPointShape(line.getPointB(), 20); */
       var line = this.add.line(null, null, this.b.board[current.row][current.col].image.x, this.b.board[current.row][current.col].image.y, this.b.board[row][col].image.x, this.b.board[row][col].image.y, colors[this.b.board[current.row][current.col].value]).setOrigin(0);
       line.setLineWidth(10)
       this.lineArray.push(line)
-      //console.log(this.lineArray)
+
+      var rect = this.add.rectangle(this.b.board[row][col].image.x, this.b.board[row][col].image.y, 20, 20, colors[this.b.board[current.row][current.col].value])
+      this.rectArray.push(rect)
+
       this.pathDots.push(newDot)
     }
   }
@@ -386,119 +376,126 @@ class playGame extends Phaser.Scene {
         //this.tally.square++
         this.squareBox.clear()
       }
-      this.removeGems()
-    }
 
-  }
-  removeGems() {
-    this.roverExplode = []
-    if (this.isSpecial) {
-      var num = 0
-    } else {
-      var num = 1
-    }
-    //remove line path and graphics
-    this.graphics.clear()
-    if (this.lineArray.length > 0) {
-      this.lineArray.forEach(function (line) {
-        line.destroy()
-      }.bind(this))
-      this.lineArray = []
-    }
-    if (this.dragging) {
-      this.canPick = false;
-      if (this.pathDots.length > num) {
-        this.pathValue = this.b.board[this.pathDots[0].row][this.pathDots[0].col].value
-
-        var results = this.b.remove(this.pathDots);
-
-        this.tallyResults(results)
-
-        let destroyed = 0
-        results.forEach(function (pos) {
-          var valExtra = this.e.valueAt(pos.row, pos.col)
-
-          if (valExtra != null) {
-            if (valExtra == gameOptions.bombValue) {
-              this.e.extra[pos.row][pos.col].strength--
-              if (this.e.extra[pos.row][pos.col].strength == 2) {
-                this.e.extra[pos.row][pos.col].image.setTexture('bomb3')
-              } else if (this.e.extra[pos.row][pos.col].strength == 1) {
-                this.e.extra[pos.row][pos.col].image.setTexture('bomb2')
-              } else if (this.e.extra[pos.row][pos.col].strength == 0) {
-                //this.explodeBomb(pos.row, pos.col)
-                this.bombToExplode.push({ row: pos.row, col: pos.col })
-                var tween = this.tweens.add({
-                  targets: this.e.extra[pos.row][pos.col].image,
-                  duration: 400,
-                  alpha: 0,
-                  y: -50,
-                  onCompleteScope: this,
-                  onComplete: function () {
-                    this.e.setEmptyExtra(pos.row, pos.col)
-                    this.tally.bomb++
-                  }
-                })
-              }
-
-            } else if (valExtra == gameOptions.iceValue) {
-              this.e.extra[pos.row][pos.col].strength--
-              if (this.e.extra[pos.row][pos.col].strength == 2) {
-                this.e.extra[pos.row][pos.col].image.setTexture('ice2')
-              } else if (this.e.extra[pos.row][pos.col].strength == 1) {
-                this.e.extra[pos.row][pos.col].image.setTexture('ice3')
-              } else if (this.e.extra[pos.row][pos.col].strength == 0) {
-                //this.explodeBomb(pos.row, pos.col)
-
-                var tween = this.tweens.add({
-                  targets: this.e.extra[pos.row][pos.col].image,
-                  duration: 400,
-                  alpha: 0,
-                  y: -50,
-                  onCompleteScope: this,
-                  onComplete: function () {
-                    this.e.setEmptyExtra(pos.row, pos.col)
-                    this.tally.ice++
-                  }
-                })
-              }
-
-            }
-          }
-          if (pos.rover) {
-
-            this.tally.rover++
-            this.roverExplode.push(pos)
-          }
-          if (this.b.isNeighborFire(pos.row, pos.col)) {
-            this.stopFire = true
-          }
-          //console.log(this.stopFire)
-          this.poolArray.push(this.b.board[pos.row][pos.col].image)
-          destroyed++;
-          this.tweens.add({
-            targets: this.b.board[pos.row][pos.col].image,
-            alpha: 0,
-            duration: this.removeSpeed,
-            callbackScope: this,
-            onComplete: function (event, sprite) {
-              destroyed--;
-              if (destroyed == 0) {
-                this.makeDotsFall();
-              }
-            }
-          });
-
-        }.bind(this));
-
-
-        //draw(b.data());
+      if (this.pathDots.length > 1) {
+        this.removeGems()
       } else {
         //console.log(this.pathDots)
         this.b.board[this.pathDots[0].row][this.pathDots[0].col].image.setAlpha(1)
         this.dragging = false;
         this.canPick = true
       }
+
+
+
+    }
+
+  }
+  removeGems() {
+    this.roverExplode = []
+
+    //remove line path 
+    if (this.lineArray.length > 0) {
+      this.lineArray.forEach(function (line) {
+        line.destroy()
+      }.bind(this))
+      this.lineArray = []
+    }
+    if (this.rectArray.length > 0) {
+      this.rectArray.forEach(function (rect) {
+        rect.destroy()
+      }.bind(this))
+      this.rectArray = []
+    }
+    if (this.dragging) {
+      this.canPick = false;
+
+      this.pathValue = this.b.board[this.pathDots[0].row][this.pathDots[0].col].value
+
+      var results = this.b.remove(this.pathDots);
+
+      this.tallyResults(results)
+
+      let destroyed = 0
+      results.forEach(function (pos) {
+        var valExtra = this.e.valueAt(pos.row, pos.col)
+
+        if (valExtra != null) {
+          if (valExtra == gameOptions.bombValue) {
+            this.e.extra[pos.row][pos.col].strength--
+            if (this.e.extra[pos.row][pos.col].strength == 2) {
+              this.e.extra[pos.row][pos.col].image.setTexture('bomb3')
+            } else if (this.e.extra[pos.row][pos.col].strength == 1) {
+              this.e.extra[pos.row][pos.col].image.setTexture('bomb2')
+            } else if (this.e.extra[pos.row][pos.col].strength == 0) {
+              //this.explodeBomb(pos.row, pos.col)
+              this.bombToExplode.push({ row: pos.row, col: pos.col })
+              var tween = this.tweens.add({
+                targets: this.e.extra[pos.row][pos.col].image,
+                duration: 400,
+                alpha: 0,
+                y: -50,
+                onCompleteScope: this,
+                onComplete: function () {
+                  this.e.setEmptyExtra(pos.row, pos.col)
+                  this.tally.bomb++
+                }
+              })
+            }
+
+          } else if (valExtra == gameOptions.iceValue) {
+            this.e.extra[pos.row][pos.col].strength--
+            if (this.e.extra[pos.row][pos.col].strength == 2) {
+              this.e.extra[pos.row][pos.col].image.setTexture('ice2')
+            } else if (this.e.extra[pos.row][pos.col].strength == 1) {
+              this.e.extra[pos.row][pos.col].image.setTexture('ice3')
+            } else if (this.e.extra[pos.row][pos.col].strength == 0) {
+              //this.explodeBomb(pos.row, pos.col)
+
+              var tween = this.tweens.add({
+                targets: this.e.extra[pos.row][pos.col].image,
+                duration: 400,
+                alpha: 0,
+                y: -50,
+                onCompleteScope: this,
+                onComplete: function () {
+                  this.e.setEmptyExtra(pos.row, pos.col)
+                  this.tally.ice++
+                }
+              })
+            }
+
+          }
+        }
+        if (pos.rover) {
+
+          this.tally.rover++
+          this.roverExplode.push(pos)
+        }
+        if (this.b.isNeighborFire(pos.row, pos.col)) {
+          this.stopFire = true
+        }
+        //console.log(this.stopFire)
+        this.poolArray.push(this.b.board[pos.row][pos.col].image)
+        destroyed++;
+        this.tweens.add({
+          targets: this.b.board[pos.row][pos.col].image,
+          alpha: 0,
+          duration: this.removeSpeed,
+          callbackScope: this,
+          onComplete: function (event, sprite) {
+            destroyed--;
+            if (destroyed == 0) {
+              this.makeDotsFall();
+            }
+          }
+        });
+
+      }.bind(this));
+
+
+      //draw(b.data());
+
       this.removePath();
 
     }
@@ -580,8 +577,8 @@ class playGame extends Phaser.Scene {
         onComplete: function () {
           moved--;
           if (moved == 0) {
-
-            this.endTurn()
+            this.time.addEvent({ delay: 100, callback: this.endTurn, callbackScope: this, loop: false });
+            //this.endTurn()
 
           }
         }
@@ -596,24 +593,23 @@ class playGame extends Phaser.Scene {
         // console.log('rover explode')
         this.explodeBomb(this.roverExplode[i].row, this.roverExplode[i].col)
       }
+      this.removeGems()
 
-      this.isSpecial = true;
-      this.removeGems()
     } else if (this.gemCheck()) {
-      this.isSpecial = true;
       this.removeGems()
+
     } else if (this.bombToExplode.length > 0) {
       for (var i = 0; i < this.bombToExplode.length; i++) {
         var bomb = this.bombToExplode.pop()
         this.explodeBomb(bomb.row, bomb.col)
       }
       this.bombToExplode = []
-      this.isSpecial = true;
+
       this.removeGems()
 
     } else if (this.dropCheck()) {
-      this.isSpecial = true;
       this.removeGems()
+
     } else {
       if (levelSettings.allowRover) {
         this.roverCheck()
@@ -623,7 +619,7 @@ class playGame extends Phaser.Scene {
       }
       this.canPick = true
       this.dragging = false;
-      this.isSpecial = false;
+
       this.pathValue = null
       this.events.emit('moves', { moves: this.tally.moves })
 
