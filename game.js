@@ -630,7 +630,7 @@ class playGame extends Phaser.Scene {
 
   }
   dropCheck() {
-
+    this.pathDots = []
     let result = false
     if (!levelSettings.allowDrop) {
       return result
