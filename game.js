@@ -225,7 +225,7 @@ class playGame extends Phaser.Scene {
         this.oneDot.clearTint()
         this.explode(row, col)
         this.startOneDot = false
-        //this.removeGems()
+        this.removeGems()
         //this.removeOne(row, col)
         return
       }
@@ -240,7 +240,7 @@ class playGame extends Phaser.Scene {
         this.allColor.clearTint()
         this.explode(row, col)
         this.startAllColor = false
-        //this.removeGems()
+        this.removeGems()
         //this.removeOne(row, col)
         return
       }
@@ -255,7 +255,7 @@ class playGame extends Phaser.Scene {
         this.bombPU.clearTint()
 
         this.startBombPU = false
-        //this.removeGems()
+        // this.removeGems()
         //this.removeOne(row, col)
         return
       }
@@ -640,7 +640,7 @@ class playGame extends Phaser.Scene {
         this.pathDots.push({ row: this.rows - 1, col: j })
         //console.log(this.pathDots)
         result = true
-        //console.log('found drop')
+        console.log('found drop')
       }
     }
     //console.log(result)
